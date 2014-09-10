@@ -1,0 +1,14 @@
+#Input file for making finder and observability charts
+#--------------------Select Charts To Display---------------------------------------
+y			#Show telescope Hour Angle observing limits
+y			#Show altitude vs. Local Siderial Time plot with telescope observing limits
+y			#Show finder chart for IGRINS Slit View Camera FOV
+#--------------------Information on Target------------------------------------------
+90.0			#Sky Position Angle (Start north and go east, N=0, E=90, S=180, W=270 degrees, Default = 90 deg slit oriented east-west)
+1			#1=Input object as RA & Dec., 2=Input object name
+17:45:38.16 -29:00:49.1		#Object Coordinates in RA & Dec [hh:mm:ss.ss<space>+/-hh:mm:ss.s], or Object Name
+#--------------------Information on Guide Star---------------------------------------
+2			#Input guide star as... 0=no guide star, 1=dRA & dDec, 2=RA & Dec., 3=guide star name, #4=automatically find guide stars
+17:45:38.46 -29:02:03.9			#Guide star offset in dRA & dDec [arseconds<space>arcseconds], coordinates in RA & Dec [hh:mm:ss.ss<space>+/-hh:mm:ss.s], or Name
+#--------------------User Supplied FITS File---------------------------------------
+			#Fits file path for making finder chart, leave blank if you just want to use 2MASS K-band
