@@ -1,4 +1,4 @@
-IGIRNS Observability Version 1.3
+IGIRNS Observability Version 1.4
 
 written by Kyle Kaplan 
 Email: kfkaplan@astro.as.utexas.edu
