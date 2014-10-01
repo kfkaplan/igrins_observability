@@ -4,7 +4,7 @@ import sys
 def OutputFile(outfilename, starname):
     outlines = ["#Input file for making finder and observability charts\n",
                 "#--------------------Select Charts To Display---------------------------------------\n",
-                "y                       #Show telescope Hour Angle observing limits\n",
+                "n                       #Show telescope Hour Angle observing limits\n",
                 "y                       #Show altitude vs. Local Siderial Time plot with telescope observing limits\n",
                 "y                       #Show finder chart for IGRINS Slit View Camera FOV\n",
                 "#--------------------Target Info------------------------------------------\n",
@@ -24,14 +24,36 @@ def OutputFile(outfilename, starname):
 
 
 if __name__ == "__main__":
-    target_file = sys.argv[1]
-    infile = open(target_file)
-    lines = infile.readlines()
-    infile.close()
-    skip = 10
+    if len(sys.argv) == 1:
+        print "This script will create input files that are usable by observability.py"
+        print "type 'python MakeInputFiles.py csvfile [options]', where csvfile is the"
+        print "  filename of a comma-separated value table, and options are:"
+        print "\n"
+        print "-skip=n :  skip the n first lines of the table (contains header info or "
+        print "           something. Defaults to 1"
+        print "-delim=c : set the delimiter to the character 'c' (can be whatever you want)"
+        print "           Defaults to a comma"
+        print "-col=i :   The name of the star is in the ith column, starting at 0. "
+        print "           Defaults to 1."
+    else:
+        skip = 1
+        delim = ","
+        col = 1
+        for arg in sys.argv[1:]:
+            if "-skip" in arg:
+                skip = int(arg.split("=")[-1])
+            elif "-delim" in arg:
+                delim = arg.split("=")[-1]
+            elif "-col" in arg:
+                col = int(arg.split("=")[-1])
+            else:
+                target_file = arg
+        infile = open(target_file)
+        lines = infile.readlines()
+        infile.close()
 
-    for line in lines[skip:]:
-        segments = line.split("|")
-        starname = segments[1].strip('"').strip()
-        print starname
-        OutputFile("input/{:s}.inp".format(starname.replace(" ", "_")), starname)
+        for line in lines[skip:]:
+            segments = line.split(delim)
+            starname = segments[col].strip('"').strip()
+            print starname
+            OutputFile("input/{:s}.inp".format(starname.replace(" ", "_")), starname)
