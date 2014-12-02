@@ -8,8 +8,8 @@ import time #To put in delays
 
 #Open DS9
 def open():
-  call('ds9 &', shell=True) #Load DS9
   call('xpans &', shell=True) #Load XPA immediately, so XPA commands can be sent to ds9
+  call('ds9 &', shell=True) #Load DS9
   time.sleep(2) #Give computer a few seconds to respond after opening DS9
   
 def close():
@@ -43,4 +43,9 @@ def rotto(angle):
 def north():
   set('rotate to 0')
 
-
+def show(fits_file, new = False):
+  if new: #Check if there are any frames, default no, but user can set new = True
+    set('frame new') #If not create a new frame
+  set('fits '+ fits_file) #open fits file
+  set('scale log') #Set view to log scale
+  set('scale Zscale') #Set scale limits to Zmax, looks okay

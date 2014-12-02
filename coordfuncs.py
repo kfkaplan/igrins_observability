@@ -37,6 +37,7 @@ def name_query(target_name):
 
 #Input coordinates as a sexigasimal string and turn into a coords object
 def coord_query(input_coords):
+
   if input_coords.count(' ') == 1 :#format for something like XX:XX:XX.XXX +XX:XX:XX.XX
     [ra,dec] = input_coords.split(' ')  #Just split at the space between RA and Dec.
   elif input_coords.count(' ') == 5: #format for something like XX XX XX.XX +XX XX XX.X
@@ -136,6 +137,8 @@ def dec_seperation(obj1, obj2, units='deg'):
     return ddec*60.0
   elif units=='arcsec' or units=='arcsecond' or units=='arcseconds':
     return ddec*3600.0
+
+	
 
 #Calculate altitude of target in the sky given target coords, observer location, and Local Siderial Time (LST)
 def alt(tar, loc, LST):

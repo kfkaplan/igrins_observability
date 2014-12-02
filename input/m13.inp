@@ -1,7 +1,7 @@
 #Input file for making finder and observability charts
 #--------------------Select Charts To Display---------------------------------------
-n			#Show telescope Hour Angle observing limits
-n			#Show altitude vs. Local Siderial Time plot with telescope observing limits
+y			#Show telescope Hour Angle observing limits
+y			#Show altitude vs. Local Siderial Time plot with telescope observing limits
 y			#Show finder chart for IGRINS Slit View Camera FOV
 #--------------------Target Info------------------------------------------
 90.0			#Sky Position Angle (Start north and go east, N=0, E=90, S=180, W=270 degrees, Default = 90 deg slit oriented east-west)

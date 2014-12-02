@@ -129,6 +129,8 @@ if show_telescope_limits == 'y': #if user says yes to plotting telescope hour an
   radplot.set_yticks(arange(-120,60,20)) #Set tick marks for radial units
   radplot.set_yticklabels(map(str, arange(120, -60, -20)))   #label radial units
   radplot.set_xticklabels(['-6 HA', '-3 HA', '0 HA','3 HA' ,'6 HA','9 HA' ,' ','-9 HA'])  # Label HA units
+  radplot.set_xlabel('Hour Angle')
+  radplot.set_ylabel('Declination')
   radplot.set_title('107'' (2.7 m) Observing Limit Chart') #Title of plot
   plt.show() #show plot
 
@@ -260,4 +262,19 @@ if gstar_choice == '4' and show_finder_chart == 'y':
 ds9.set('regions group FOV property move no') #Make FOV unmoveable, might change this later if this causes issues with folks
 ds9.set('regions group FOV moveback') #move regions such as the FOV, slit, compass, etc. to the back so the user can select guide star points
 ds9.set('mode pointer') #Go back to pointer mode when finished with everything
+
+#Load coordinate grid and save finder chart as .eps file, EXPERIMENTAL FEATURE
+ds9.set('colorbar no')
+ds9.set('grid on')
+#ds9.set('grid type publication')
+ds9.set('grid sky fk5')
+#ds9.set('grid color red')
+ds9.set('grid grid color red')
+#ds9.set('grid title def no')
+#ds9.set('grid title text {'+object+'}')
+#ds9.set('grid numerics type exterior')
+ds9.set('grid numerics color red')
+#ds9.set('grid axes type exterior')
+ds9.set('zoom 0.7')
+ds9.set('saveimage eps finderchart.eps')
    
