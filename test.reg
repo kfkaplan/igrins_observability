@@ -1,0 +1,7 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+polygon(5:35:23.060,-5:26:56.39,5:35:23.083,-5:26:55.95,5:35:23.472,-5:26:44.09,5:35:23.510,-5:26:36.84,5:35:24.003,-5:26:26.93,5:35:24.073,-5:26:26.40,5:35:25.035,-5:26:12.38,5:35:20.382,-5:25:04.72,5:35:17.191,-5:24:19.19,5:35:16.400,-5:24:18.64,5:35:16.310,-5:24:16.67,5:35:14.690,-5:24:26.72,5:35:13.949,-5:24:37.97,5:35:13.300,-5:24:55.77,5:35:13.047,-5:25:12.88,5:35:12.884,-5:25:35.22,5:35:13.030,-5:26:00.13,5:35:18.126,-5:27:12.34,5:35:20.676,-5:27:13.97) # move=0 tag={FOV}
+point(5:35:15.549,-5:25:14.04) # point=circle color=yellow font="helvetica 12 bold roman" text={Offslit guide star [sl: 53.98, sw:-36.64]} move=0 tag={FOV}
+box(5:35:19.840,-5:25:26.30,15",1",44.9865) # width=2 move=0 tag={FOV}
+# compass(5:35:19.840,-5:25:26.30,72") compass=fk5 {N} {E} 1 1 color=blue font="helvetica 12 bold roman" move=0 tag={FOV}

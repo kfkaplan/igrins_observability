@@ -1,0 +1,11 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+box(5:35:14.100,-5:22:23.00,15",1",44.9883) # width=2 move=0 tag={FOV}
+# compass(5:35:14.100,-5:22:23.00,72") compass=fk5 {N} {E} 1 1 color=blue font="helvetica 12 bold roman" move=0 tag={FOV}
+circle(5:35:04.978,-5:16:05.49,25")
+box(5:35:14.100,-5:22:23.00,15",1",44.9865) # width=2 tag={FOV}
+point(5:35:14.100,-5:22:23.00) # point=circle width=2 text={00 Position}
+# ruler(5:33:14.179,-5:42:22.92,5:35:14.099,-5:22:23.00) ruler=fk5 arcmin text={OFF B2}
+# ruler(5:33:13.430,-5:52:22.91,5:35:14.099,-5:22:23.00) ruler=fk5 arcmin text={OFF B1}
+point(5:35:16.464,-5:23:22.85) # point=circle color=yellow font="helvetica 12 bold roman" text={Theta 1C} move=0 tag={FOV}
