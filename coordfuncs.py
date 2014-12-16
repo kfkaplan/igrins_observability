@@ -37,7 +37,6 @@ def name_query(target_name):
 
 #Input coordinates as a sexigasimal string and turn into a coords object
 def coord_query(input_coords):
-
   if input_coords.count(' ') == 1 :#format for something like XX:XX:XX.XXX +XX:XX:XX.XX
     [ra,dec] = input_coords.split(' ')  #Just split at the space between RA and Dec.
   elif input_coords.count(' ') == 5: #format for something like XX XX XX.XX +XX XX XX.X
@@ -65,6 +64,8 @@ def sex2deg(input, units='dms'):
     s=0.0 #Set seconds to zero if user does not input seconds
   if float(x) >= 0: #Check if number is positive
     deg = float(x) + (float(m)/60.0) + (float(s)/3600.0) #Convert sexigasimal units to degrees
+    if x == '-00': #Fix bug where dec of -00 gets read in as positive 
+      deg = -deg
   else: #If number is not positive we want to subtract the minutes and seconds
     deg = float(x) - (float(m)/60.0) - (float(s)/3600.0) #Convert sexigasimal units to degrees
   units = units.lower() #Change units to lower case to 

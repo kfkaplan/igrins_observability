@@ -8,7 +8,7 @@ y			#Show finder chart for IGRINS Slit View Camera FOV
 2			#1=Input object as RA & Dec., 2=Input object name
 NGC 2440		#Object Coordinates in RA & Dec [hh:mm:ss.ss<space>+/-hh:mm:ss.s], or Object Name
 #--------------------Guide Star Info---------------------------------------
-4			#Input guide star as... 0=no guide star, 1=dRA & dDec, 2=RA & Dec., 3=guide star name, #4=automatically find guide stars
-			#Guide star offset in dRA & dDec [arseconds<space>arcseconds], coordinates in RA & Dec [hh:mm:ss.ss<space>+/-hh:mm:ss.s], or Name
+1			#Input guide star as... 0=no guide star, 1=dRA & dDec, 2=RA & Dec., 3=guide star name, #4=automatically find guide stars
+15 22			#Guide star offset in dRA & dDec [arseconds<space>arcseconds], coordinates in RA & Dec [hh:mm:ss.ss<space>+/-hh:mm:ss.s], or Name
 #--------------------User Supplied FITS File---------------------------------------
 			#Fits file path for making finder chart, leave blank if you just want to use 2MASS K-band

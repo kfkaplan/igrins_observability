@@ -27,6 +27,12 @@ Probably will work on Linux machines, but untested.
 
 ==================== Version Notes =========================
 
+(Dec 2014) Changes since V1.4
+-NEW FEATURE! Load input files from the command line! Thank you Kevin Guillikson for adding this feature
+-Coordinate grid is now displayed in DS9
+-DS9 regions files are now movable by the user (previously this was turned off)
+-Bug fix: Declinations of -00 deg used to be read in as +00, now should work fine
+
 (Sept. XX, 2014) Changes since V1.3:
 -NEW FEATURE! Automatically find guide stars by setting the input for guide star to 4 and displays them in DS9 and command line with K-mag, SL, SW
 -NEW FEATURE! When automatically searching for guide stars, you can double click them to see some extra info (ie. K-mag, SL, SW, & coordinates)
