@@ -318,5 +318,6 @@ ds9.set('grid grid color red')
 ds9.set('grid numerics color red')
 #ds9.set('grid axes type exterior')
 ds9.set('zoom 0.7')
-ds9.set('saveimage eps finderchart.eps')
+output_image = '{:s}.eps'.format(obj_input.replace(' ', '_'))
+ds9.set('saveimage eps {:s}'.format(output_image))
 
