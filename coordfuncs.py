@@ -7,10 +7,11 @@ import urllib
 
 try:
     from astroquery.simbad import Simbad
-
     astroquery_import = True
 except ImportError:
     astroquery_import = False
+    print '\n\nWARNING! astroquery not found! Falling back to urllib! '
+    print 'This is less reliable for parsing object name --> ra/dec!\n\n'
 
 #Grab RA and Dec of object by looking up it's name
 #This function is a modified copy of https://gist.github.com/juandesant/5163782#file-sesame-py-L18
