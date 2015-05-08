@@ -100,11 +100,12 @@ The first set of options in the input file denote which charts the
 If you are only interested in the finder charts, set the first two
     options to 'n' while leaving the third option set to 'y'.
 ###Select Charts To Display
-  Variable     |Description                                  
+
+  Value        |Description                                  
   :-----------:| -------------------------------------------- 
    y           | Show telescope Hour Angle observing limits.  
-   y           | Show altitude vs. Local Siderial Time plot <br> with telescope observing limits. <br>
-   y           | Show finder chart for IGRINS Slit View <br> Camera FOV. 
+   y           | Show altitude vs. Local Siderial Time plot with telescope <br>  observing limits. 
+   y           | Show finder chart for IGRINS Slit View Camera FOV. 
 
 Here the sky PA is the rotation of the slit counterclockwise from
     the North.
@@ -116,9 +117,11 @@ The final line is where you input the name or coordinates of the
 
 ###Information on Target
 
-  155.0                 #Sky Position Angle (Start north and go east, N=0, E=90, S=180, W=270 degrees, Default = 90 deg slit oriented east-west)
-  1                     #1=Input object as RA & Dec., 2=Input object name
-  22:29:33.18 -20:47:58.4               #Object Coordinates in RA & Dec [hh:mm:ss.ss<space>+/-hh:mm:ss.s], or Object Name
+  Value                    |Description                                  
+  :-----------------------:| -------------------------------------------- 
+   155.0                   | Sky Position Angle (Start north and go east, N = 0, E = 90, S = 180, W = 270 <br> degrees, Default = 90 deg slit oriented east-west
+   1                       | 1 = Input object as RA & Dec, 2 = Input object name 
+   22:29:33.18 -20:47:58.4 | Object Coordinates in RA & Dec [hh:mm:ss.ss +/- hh:mm:ss.s], or Object Name
 
 Here you specifiy if you don't want a guide star '0', want to input
     a guide star based on the distance in RA and Dec. in arcseconds
@@ -134,22 +137,18 @@ Below that you put in the name or coordinates for a guide star, if
 
 ###Information on Guide Star
 
-  2 ~~~~~~~~~~~~~~~~~~~~~~~~~ #Input guide star as... 0=no guide
-                               star, 1=dRA & dDec, 2=RA & Dec.,
-                               3=guide star name, #4=automatically
-                               find guide stars
-  22:29:38.016 -20:52:16.36 ~ #Guide star offset in dRA & dDec
-                               [arseconds<space>arcseconds],
-                               coordinates in RA & Dec
-                               [hh:mm:ss.ss<space>+/-hh:mm:ss.s],
-                               or Name
+  Value                     |Description                                  
+  :-------------------------:| -------------------------------------------- 
+   155.0                     | Sky Position Angle (Start north and go east, N = 0, E = 90, S = 180, W = 270 <br> degrees, Default = 90 deg slit oriented east-west
+   2                         | Guide star input; 0 = no guide star, 1 = dRA & dDec, 2 = RA & Dec.,          <br> 3 = guide star name, 4 = automatically find guide stars 
+   22:29:38.016 -20:52:16.36 | Guide star offset in dRA & dDec [arcseconds arcseonds], coordinates in RA &  <br> Dec [hh:mm:ss.ss +/- hh:mm:ss.s], or Name
 
 If you want to use your own fits file for the finder charts in ds9,
     put the path here to the fits file, leave blank to default to
     the 2MASS K-band images
 
 ###User-Supplied FITS File
-/path/to/image.fits    #Fits file path for making finder chart, leave blank if you just want to use 2MASS K-band
+/path/to/image.fits will fits file path for making finder chart, leave blank if you just want to use 2MASS K-band
 
 ##Troubleshooting
 * If you get an error on the function `name_query` or when trying to download a 2MASS image in DS9 you might need to connect to the internet.
