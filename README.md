@@ -100,17 +100,11 @@ The first set of options in the input file denote which charts the
 If you are only interested in the finder charts, set the first two
     options to 'n' while leaving the third option set to 'y'.
 ###Select Charts To Display
-  |Variable     |Description              |
-  |:-----------:|:-----------------------:|
-  | y           |Show telescope Hour Angle
-                 observing limits         |
-  | y           |Show altitude vs. Local  
-                 Sidrial Time plot with 
-                 telescope observing 
-                 limits                   |
-  | y           |Show finder chart for    
-                 IGRINS Slit View Camera  
-                 FOV                      |
+  |Variable     |Description                                 |
+  |:-----------:|--------------------------------------------|
+  | y           |Show telescope Hour Angle observing limits. |
+  | y           |Show altitude vs. Local Siderial Time plot <br> with telescope observing limits. <br>|
+  | y           |Show finder chart for IGRINS Slit View <br> Camera FOV. |
 
 Here the sky PA is the rotation of the slit counterclockwise from
     the North.
