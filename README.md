@@ -102,15 +102,15 @@ If you are only interested in the finder charts, set the first two
 ###Select Charts To Display
   |Variable     |Description              |
   |:-----------:|:-----------------------:|
-  | y           |Show telescope Hour Angle|
-                 observing limits
-  | y           |Show altitude vs. Local  |
+  | y           |Show telescope Hour Angle
+                 observing limits         |
+  | y           |Show altitude vs. Local  
                  Sidrial Time plot with 
                  telescope observing 
-                 limits                   
-  | y           |Show finder chart for    |
+                 limits                   |
+  | y           |Show finder chart for    
                  IGRINS Slit View Camera  
-                 FOV
+                 FOV                      |
 
 Here the sky PA is the rotation of the slit counterclockwise from
     the North.
