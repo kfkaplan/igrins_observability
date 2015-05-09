@@ -78,7 +78,8 @@ n_gstars = int(
     str.strip(paths.readline().split('\t')[0]))  #Number of brightest guide stars to find when searching for guide stars
 paths.close()  #close options file
 
-#Read in stuff from input file, see input file comments for more info
+#Read in stuff from input file, see input file comments for more info. Return error
+#message if the file cannot be found
 if len(sys.argv) > 1:
     input_file = sys.argv[1]
 else:
