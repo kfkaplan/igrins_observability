@@ -117,11 +117,11 @@ The final line is where you input the name or coordinates of the
 
 ###Information on Target
 
-  Value                    |Description                                  
-  :-----------------------:| -------------------------------------------- 
-   155.0                   | Sky Position Angle (Start north and go east, N = 0, E = 90, S = 180, W = 270 <br> degrees, Default = 90 deg slit oriented east-west
-   1                       | 1 = Input object as RA & Dec, 2 = Input object name 
-   22:29:33.18 -20:47:58.4 | Object Coordinates in RA & Dec [hh:mm:ss.ss +/- hh:mm:ss.s], or Object Name
+  Value                     |Description                                  
+  :------------------------:| -------------------------------------------- 
+   155.0                    | Sky Position Angle (Start north and go east, N = 0, E = 90, S = 180, <br> W = 270 degrees, Default = 90 deg slit oriented east-west
+   1                        | 1 = Input object as RA & Dec, 2 = Input object name 
+   22:29:33.18 -20:47:58.4  | Object Coordinates in RA & Dec [hh:mm:ss.ss +/- hh:mm:ss.s], or Object Name
 
 Here you specifiy if you don't want a guide star '0', want to input
     a guide star based on the distance in RA and Dec. in arcseconds
@@ -138,10 +138,10 @@ Below that you put in the name or coordinates for a guide star, if
 ###Information on Guide Star
 
   Value                     |Description                                  
-  :-------------------------:| -------------------------------------------- 
-   155.0                     | Sky Position Angle (Start north and go east, N = 0, E = 90, S = 180, W = 270 <br> degrees, Default = 90 deg slit oriented east-west
-   2                         | Guide star input; 0 = no guide star, 1 = dRA & dDec, 2 = RA & Dec.,          <br> 3 = guide star name, 4 = automatically find guide stars 
-   22:29:38.016 -20:52:16.36 | Guide star offset in dRA & dDec [arcseconds arcseonds], coordinates in RA &  <br> Dec [hh:mm:ss.ss +/- hh:mm:ss.s], or Name
+  :--------------------------:| -------------------------------------------- 
+   155.0                      | Sky Position Angle (Start north and go east, N = 0, E = 90, S = 180, <br> W = 270 degrees, Default = 90 deg slit oriented east-west
+   2                          | Guide star input; 0 = no guide star, 1 = dRA & dDec, 2 = RA & Dec.,          <br> 3 = guide star name, 4 = automatically find guide stars 
+   22:29:38.016 -20:52:16.36  | Guide star offset in dRA & dDec [arcseconds arcseonds], coordinates <br> in RA & Dec [hh:mm:ss.ss +/- hh:mm:ss.s], or Name
 
 If you want to use your own fits file for the finder charts in ds9,
     put the path here to the fits file, leave blank to default to
