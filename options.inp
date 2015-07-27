@@ -1,5 +1,5 @@
 #Set various options for observability.py
-393.0		#Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
+363.0		#Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
 30.6714		#Latitude of observatory (deg. north)
 104.0225	#Longitude of observatory  (deg. west)
 10		#Set 2MASS image size to NxN arcmin
