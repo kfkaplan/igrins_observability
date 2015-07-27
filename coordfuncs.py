@@ -5,35 +5,57 @@ from pdb import set_trace as stop #Use stop() for debugging
 from scipy import *
 import urllib
 
+import urllib
+
+try:
+    from astroquery.simbad import Simbad
+    astroquery_import = True
+except ImportError:
+    astroquery_import = False
+    print '\n\nWARNING! astroquery not found! Falling back to urllib! '
+    print 'This is less reliable for parsing object name --> ra/dec!\n\n'
+
 #Grab RA and Dec of object by looking up it's name
 #This function is a modified copy of https://gist.github.com/juandesant/5163782#file-sesame-py-L18
 def name_query(target_name):
-  # target_name is a variable containing a source name, such as M31, Alpha Centauri, Sag A*, etc
-  # This is the string with the URL to query the Sesame service, 
-  # using a 'name' parameter.	
-  # sesameQueryUrl = 'http://cdsws.u-strasbg.fr/axis/services/Sesame?'  +\
-  #                  'method=sesame&resultType=p&all=true&service=NSVA' +\
-  #                  '&name=%(name)s'
-  # use the updated CDS REST endpoint
-  sesameQueryUrl = 'http://cdsweb.u-strasbg.fr/cgi-bin/nph-sesame/-op/NSV?%(name)s'
-  # Build the query from the sesameQueryUrl and the dictionary
-  # We have to use urllib.quote to make it safe to include in a URL
-  sesameQuery = sesameQueryUrl % {
-      'name': urllib.quote(target_name)
-  }
-  # Read the lines of the response from the final URL
-  sesameResponse = urllib.urlopen(sesameQuery).readlines()
-  # Parse the sesameResponse to get RA, Dec 
-  # oneliner: ra, dec = filter(lambda x: x.find('%J') == 0, sesameResponse)[0].split(' ')[1:3]
-  # The coordinates are in the lines starting with %J
-  coordinateList = filter(lambda x: x.find('%J') == 0, sesameResponse)
-  # As filter returns a list, get the first line
-  coordinates = coordinateList[0]
-  # Split the coordinates between the spaces, and drop de first item (%J) (so, start from the second on)
-  coordinates = coordinates.split(' ')[1:]
-  ra  = float(coordinates[0])
-  dec = float(coordinates[1])
-  return coords(ra, dec) #Return a coordinate object
+    # target_name is a variable containing a source name, such as M31, Alpha Centauri, Sag A*, etc
+    if astroquery_import:
+        data = Simbad.query_object(target_name)
+        ra = data['RA'].item()
+        dec = data['DEC'].item()
+        return coords(ra, dec)
+
+    else:
+        # Just use urllib if astroquery is not available
+        # This is the string with the URL to query the Sesame service,
+        # using a 'name' parameter.
+        # sesameQueryUrl = 'http://cdsws.u-strasbg.fr/axis/services/Sesame?'  +\
+        #                  'method=sesame&resultType=p&all=true&service=NSVA' +\
+        #                  '&name=%(name)s'
+        # use the updated CDS REST endpoint
+        sesameQueryUrl = 'http://cdsweb.u-strasbg.fr/cgi-bin/nph-sesame/-op/NSV?%(name)s'
+        # Build the query from the sesameQueryUrl and the dictionary
+        # We have to use urllib.quote to make it safe to include in a URL
+        sesameQuery = sesameQueryUrl % {
+            'name': urllib.quote(target_name)
+        }
+        # Read the lines of the response from the final URL
+        sesameResponse = urllib.urlopen(sesameQuery).readlines()
+        # Parse the sesameResponse to get RA, Dec
+        # oneliner: ra, dec = filter(lambda x: x.find('%J') == 0, sesameResponse)[0].split(' ')[1:3]
+        # The coordinates are in the lines starting with %J
+        coordinateList = filter(lambda x: x.find('%J') == 0, sesameResponse)
+        # As filter returns a list, get the first line
+        print target_name
+        print coordinateList
+        coordinates = coordinateList[0]
+        # Split the coordinates between the spaces, and drop de first item (%J) (so, start from the second on)
+        coordinates = coordinates.split(' ')[1:]
+        ra = float(coordinates[0])
+        dec = float(coordinates[1])
+        print ra, dec
+        print target_name
+        return coords(ra, dec)  #Return a coordinate object
 
 #Input coordinates as a sexigasimal string and turn into a coords object
 def coord_query(input_coords):
