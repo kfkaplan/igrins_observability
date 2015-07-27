@@ -1,13 +1,14 @@
-# Finder chart making program for IGRINS at the 2.7 m telescope at McDonald Observatory.
-#Created by Kyle F. Kaplan July 2014.
-#
-#Program makes the following
-#	-telescope limitation HA chart
-#	-Altitude chart vs. LST showing telescope observing limits
-#	-Finder chart for IGRINS Slit View Camera
+''' Finder chart making program for IGRINS at the 2.7 m telescope at McDonald 
+Observatory.
+Created by Kyle F. Kaplan July 2014.
+Program makes the following
+    -telescope limitation HA chart
+    -Altitude chart vs. LST showing telescope observing limits
+    -Finder chart for IGRINS Slit View Camera'''
 
-#This function creates the region file for the IGRINS Slit View Camera (SVC) FOV
-#Rotation in Position Angle is accounted for via rotation matrix for the polygon used to represent the SVC FOV
+'''This function creates the region file for the IGRINS Slit View Camera (SVC) FOV
+Rotation in Position Angle is accounted for via rotation matrix for the 
+polygon used to represent the SVC FOV'''
 def create_region_template(rotation, guidestar_dra, guidestar_ddec, guidestar_sl, guidestar_sw):
     default_slit_angle = 359.98672  #Default angle of the slit (East to west)
     poly_x = [0.02714, 0.02712, 0.02593, 0.02462, 0.02412, 0.02422, 0.02429,
@@ -79,7 +80,15 @@ paths.close()  #close options file
 if len(sys.argv) > 1:
     input_file = sys.argv[1]
 else:
-    input_file = raw_input('Enter name of input file: ')  #User inputs path to input file
+    while True:
+        try:
+            input_file = raw_input('Enter input file name: ')
+            break
+        except IOError: 
+            print('Error: could not find file.')
+
+
+
 paths = open(input_file)  #Open input file
 skip = paths.readline()  #skip line
 skip = paths.readline()  #skip line
@@ -318,5 +327,7 @@ ds9.set('grid grid color red')
 ds9.set('grid numerics color red')
 #ds9.set('grid axes type exterior')
 ds9.set('zoom 0.7')
-ds9.set('saveimage eps finderchart.eps')
+#ds9.set('saveimage eps finderchart.eps')
+output_image = '{:s}.eps'.format(obj_input.replace(' ', '_'))
+ds9.set('saveimage eps {:s}'.format(output_image))
 
