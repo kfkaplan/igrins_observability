@@ -11,14 +11,17 @@ Rotation in Position Angle is accounted for via rotation matrix for the
 polygon used to represent the SVC FOV'''
 def create_region_template(rotation, guidestar_dra, guidestar_ddec, guidestar_sl, guidestar_sw):
     default_slit_angle = 359.98672  #Default angle of the slit (East to west)
-    poly_x = [0.02714, 0.02712, 0.02593, 0.02462, 0.02412, 0.02422, 0.02429,
-              #Default x values for points in FOV polygon
-              -0.00265, -0.02095, -0.02338, -0.02403, -0.02681, -0.02677, -0.02518,
-              -0.02256, -0.01865, -0.01333, 0.0158, 0.0236]
-    poly_y = [-0.00825096, -0.00809768, -0.00462737, -0.00309165, 0.00030273, 0.00061059, 0.00618683,
-              #Default y values for points in FOV polygon
-              0.00582677, 0.00541191, 0.00319962, 0.00332299, -0.00340406, -0.00778661, -0.01318707,
-              -0.01728969, -0.02215466, -0.02662075, -0.0258552, -0.01869832]
+    x, y, poly_x, poly_y = loadtxt('scam-outline.txt', unpack=True) #Outline of SVC FOV, thanks to Henry Roe (private communication)
+    poly_x = poly_x / 3600.0 #Convert arcseconds to degrees
+    poly_y = poly_y / 3600.0
+    # poly_x = [0.02714, 0.02712, 0.02593, 0.02462, 0.02412, 0.02422, 0.02429,  #Old polygon, now using new one from Henry Roe
+    #           #Default x values for points in FOV polygon
+    #           -0.00265, -0.02095, -0.02338, -0.02403, -0.02681, -0.02677, -0.02518,
+    #           -0.02256, -0.01865, -0.01333, 0.0158, 0.0236]
+    # poly_y = [-0.00825096, -0.00809768, -0.00462737, -0.00309165, 0.00030273, 0.00061059, 0.00618683,
+    #           #Default y values for points in FOV polygon
+    #           0.00582677, 0.00541191, 0.00319962, 0.00332299, -0.00340406, -0.00778661, -0.01318707,
+    #           -0.01728969, -0.02215466, -0.02662075, -0.0258552, -0.01869832]
     rad_rot = radians(rotation)  #Convert degrees to radians for angle of rotation
     rotMatrix = array(
         [[cos(rad_rot), -sin(rad_rot)], [sin(rad_rot), cos(rad_rot)]])  #Set up rotation matrix for polygon
