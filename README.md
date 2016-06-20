@@ -1,4 +1,4 @@
-#IGRINS Observability Version 1.4
+#IGRINS Observability Version 1.5
 Written by Kyle Kaplan (@kfkaplan)
 Email: kfkaplan@astro.as.utexas.edu
 
@@ -15,19 +15,24 @@ This program creates the following charts:
 Should be compatible with any OS that can run python and DS9 from a
 command line.
 
-Successfully tested on Mac OS 10.6.8, 10.9.4
+Successfully tested on Mac OS 10.6.8, 10.9.4, 10.11.5
 Unable to get to run on Windows (e-mail me if you can get it to work)
 Probably will work on Linux machines, but untested.
 
 ##Requirements
-* DS9 7.2 callable from the command line (might work on earlier
+* DS9 7.5 b1, callable from the command line (might work on earlier
 versions)
 * XPA for allowing commands to be given to DS9 from the command line
-* Python 2.6 or 2.7 (untested on other versions)
+* Python 2.7 (untested on other versions)
 * Scipy
 * Matplotlib
 
 ##Version Notes
+###(June 2016) Changes for V1.5
+* 2MASS images are finally mosaiced! No more finder charts where only half of the field is shown.  This takes advantages of new features in the lastest version of DS9 so please make sure your DS9 is up to date.
+* Updated rotation encoder at PA=90 deg. from 636 to 633 to now report the correct new encoder setting when IGRINS is mounted on the McDonald Observatory 2.7m telescope.
+* Various other minor imporvements and bug fixes over the past year and a half.
+
 ###(Dec 2014) Changes since V1.4
 * NEW FEATURE! Load input files from the command line! Thank you
 Kevin Guillikson for adding this feature

@@ -1,11 +1,11 @@
 #Set various options for observability.py
-363.0		#Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
+333.0		#Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
 30.6714		#Latitude of observatory (deg. north)
 104.0225	#Longitude of observatory  (deg. west)
-10		#Set 2MASS image size to NxN arcmin
+6.5		#Set 2MASS image size to NxN arcmin
 'k'		#Set 2MASS band ('h','j','k')
 0.119		#Slit View Camera plate-scale, arcsec per pixel
 14.0		#Guide star search K-band mag. limit, the dimmest K-band mag. to search for guide stars
 3.0		#Guide star search delta-RA limit (in arcmin) from  target
 3.0		#Guide star search delta-Dec. limit (in arcmin) from target
-10		#Guide star search, star number limit (ie. 10 means find 10 brightest stars)
+20		#Guide star search, star number limit (ie. 10 means find 10 brightest stars)

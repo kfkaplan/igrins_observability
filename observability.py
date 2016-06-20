@@ -187,16 +187,28 @@ if show_finder_chart == 'y':
     ds9.open()  #Open DS9
     #ds9.wait(2.0) #Used to be needed, commented out for now because I think I fixed this bug and can now speed things up
     ds9.set('single')  #set single display mode
-    if finder_chart_fits == '':  #Use 2MASS K-band if no user specified fits file is found
-        ds9.set('2mass survey ' + band)  #Load 2MASS survey
-        ds9.set('2mass size ' + str(img_size) + ' ' + str(
-            img_size) + ' arcmin')  #Set size of image (weird issues here, only strips extracted)
+    if finder_chart_fits == '':  #Use built in skyserver if no user specified fits file is found
+        #Use HEASARC Sky View server to get mosaicced 2MASS images, to get rid of bug from where images got sliced from the 2MASS server
+        ds9.set('skyview survey 2MASS-'+band) #Use HEASARC Sky View server to get mosaicced 2MASS images
+        ds9.set('skyview pixels 450 450') #Set resoultion of image retrieved
+        ds9.set('skyview size '+ str(img_size) + ' ' + str(img_size) + ' arcmin')#Set size of image
         if obj_choice == '2':  #If user specifies object name
-            ds9.set('2mass name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
+           ds9.set('skyview name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
         else:  #If user specifies object coordiantes
-            ds9.set('2mass coord ' + str(obj_coords.ra.deg()) + ' ' + str(
-                obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
-        ds9.set('2mass close')  #Close 2MASS window
+           ds9.set('skyview coord ' + str(obj_coords.ra.deg()) + ' ' + str(
+               obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
+        ds9.set('skyview close') #Close skyserver window
+        #Old 2MASS server commented out for now, probably obselete, using HEASARC Sky View server now
+        #ds9.set('2mass close')  #Close 2MASS window
+        #ds9.set('2mass survey ' + band)  #Load 2MASS survey
+        #ds9.set('2mass size ' + str(img_size) + ' ' + str(
+        #    img_size) + ' arcmin')  #Set size of image (weird issues here, only strips extracted)
+        #if obj_choice == '2':  #If user specifies object name
+        #    ds9.set('2mass name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
+        #else:  #If user specifies object coordiantes
+        #    ds9.set('2mass coord ' + str(obj_coords.ra.deg()) + ' ' + str(
+        #        obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
+        #ds9.set('2mass close')  #Close 2MASS window
     else:  #If user does specify their own fits file, use it
         ds9.set('fits ' + finder_chart_fits)  #Load fits fits file
     ds9.set('scale log')  #Set view to log scale
@@ -266,10 +278,14 @@ if show_finder_chart == 'y':
                 'mode catalog')  #Set mode to catalog so user can click on possible guide stars and look at their stats
             gra, gdec, gmag = loadtxt('tmp.dat', usecols=(0, 1, 9), delimiter='\t', unpack=True,
                                       skiprows=1)  #Grab RA, Dec., and K-mag from catalog
-            n_gstars = len(gra)  #reset n_gstars to the actual number of guide stars found
+            gra = ascontiguousarray(gra) #Fix a bug
+            gdec = ascontiguousarray(gdec)
+            gmag = ascontiguousarray(gmag)
+            n_gstars = size(gra)  #reset n_gstars to the actual number of guide stars found
             command_line_output.append('Guide stars found:')  #Output for command line
             command_line_output.append('K-mag:\t sl: \t sw: \t\t Coordinates (J2000):')  #Output for command line
             for i in range(n_gstars):  #Loop through each guide star found and
+                
                 gstar_coords = coords(gra[i], gdec[i])
                 found_gstar_dra_arcsec = ra_seperation(obj_coords, gstar_coords,
                                                        units='arcsec')  #position of guide star from object in arcseconds
@@ -331,6 +347,6 @@ ds9.set('grid numerics color red')
 #ds9.set('grid axes type exterior')
 ds9.set('zoom 0.7')
 #ds9.set('saveimage eps finderchart.eps')
-output_image = '{:s}.eps'.format(obj_input.replace(' ', '_'))
-ds9.set('saveimage eps {:s}'.format(output_image))
+#output_image = '{:s}.eps'.format(obj_input.replace(' ', '_'))
+#ds9.set('saveimage eps {:s}'.format(output_image))
 
