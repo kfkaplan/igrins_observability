@@ -9,7 +9,8 @@ Program makes the following
 '''This function creates the region file for the IGRINS Slit View Camera (SVC) FOV
 Rotation in Position Angle is accounted for via rotation matrix for the 
 polygon used to represent the SVC FOV'''
-def create_region_template(rotation, guidestar_dra, guidestar_ddec, guidestar_sl, guidestar_sw):
+def create_region_template(rotation, plate_scale, guidestar_dra, guidestar_ddec, guidestar_sl, guidestar_sw):
+    zoom =  plate_scale / 0.119 #Set zoom scale to scale the FOV, the McDonald Observatory 2.7m plate scale is 0.119 so changing the plate scale in the options.inp file 
     default_slit_angle = 359.98672  #Default angle of the slit (East to west)
     x, y, poly_x, poly_y = loadtxt('scam-outline.txt', unpack=True) #Outline of SVC FOV, thanks to Henry Roe (private communication)
     poly_x = poly_x / 3600.0 #Convert arcseconds to degrees
@@ -25,7 +26,7 @@ def create_region_template(rotation, guidestar_dra, guidestar_ddec, guidestar_sl
     rad_rot = radians(rotation)  #Convert degrees to radians for angle of rotation
     rotMatrix = array(
         [[cos(rad_rot), -sin(rad_rot)], [sin(rad_rot), cos(rad_rot)]])  #Set up rotation matrix for polygon
-    [poly_x, poly_y] = rotMatrix.dot([poly_x, poly_y])  #Apply rotation matrix to the FOV polygon
+    [poly_x, poly_y] = rotMatrix.dot([poly_x, poly_y]) * zoom  #Apply rotation matrix to the FOV polygon, and scale it if necessary
     poly_xy = '('  #Make string to output for polygon points
     n = size(poly_x)  #Find number of points in polygon
     for i in range(n - 1):  #Loop through points 0 -> n-2
@@ -39,9 +40,12 @@ def create_region_template(rotation, guidestar_dra, guidestar_ddec, guidestar_sl
     output.append(
         'global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1')  #Set up color, fonts, and stuff
     output.append('wcs0;fk5')  #Set coordinate system
+    compass_size = str(72.0 * zoom) #Scale compass size
     output.append(
-        '# compass(0,0,72") compass=fk5 {N} {E} 1 1 font="helvetica 12 bold roman" color=blue fixed=0')  #Set compass (North and East arrows)
-    output.append('box(0,0,15",1",' + slit_angle + ') # color=green width=2')  #Display slit
+        '# compass(0,0,'+compass_size+'") compass=fk5 {N} {E} 1 1 font="helvetica 12 bold roman" color=blue fixed=0')  #Set compass (North and East arrows)
+    slit_length = str(15.0 * zoom) #Scale slit length
+    slit_width = str(1.0 * zoom) #Scale slit width
+    output.append('box(0,0,'+slit_length+'",'+slit_width+'",' + slit_angle + ') # color=green width=2')  #Display slit
     if abs(guidestar_dra) > 0. or abs(guidestar_ddec) > 0.:  #show guidestar if it exists
         output.append('point(' + str(guidestar_dra) + ',' + str(
             guidestar_ddec) + ') # point=circle font="helvetica 12 bold roman" color=yellow text={Offslit guide star [sl: ' + "%5.2f" % gstar_sl + ', sw:' + "%5.2f" % gstar_sw + ']}')
@@ -190,7 +194,7 @@ if show_finder_chart == 'y':
     if finder_chart_fits == '':  #Use built in skyserver if no user specified fits file is found
         #Use HEASARC Sky View server to get mosaicced 2MASS images, to get rid of bug from where images got sliced from the 2MASS server
         ds9.set('skyview survey 2MASS-'+band) #Use HEASARC Sky View server to get mosaicced 2MASS images
-        ds9.set('skyview pixels 450 450') #Set resoultion of image retrieved
+        ds9.set('skyview pixels 600 600') #Set resoultion of image retrieved
         ds9.set('skyview size '+ str(img_size) + ' ' + str(img_size) + ' arcmin')#Set size of image
         if obj_choice == '2':  #If user specifies object name
            ds9.set('skyview name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
@@ -241,7 +245,7 @@ if show_finder_chart == 'y':
         gstar_sw = gstar_dra_arcsec * sin(radians(PA - 90.0)) + gstar_ddec_arcsec * cos(
             radians(PA - 90.0))  #guide star position relative to slit in arcseconds
 
-    create_region_template(delta_PA, gstar_dra_deg, gstar_ddec_deg, gstar_sl,
+    create_region_template(delta_PA, plate_scale, gstar_dra_deg, gstar_ddec_deg, gstar_sl,
                            gstar_sw)  #Make region template file rotated and the specified PA
     ds9.set(
         'regions template IGRINS_svc_generated.tpl at ' + obj_coords.showcoords() + ' fk5')  #Read in regions template file
