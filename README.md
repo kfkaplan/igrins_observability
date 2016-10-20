@@ -1,10 +1,11 @@
-#IGRINS Observability Version 1.5
+#IGRINS Observability Version 1.6
 Written by Kyle Kaplan (@kfkaplan)
 Email: kfkaplan@astro.as.utexas.edu
 
 This python program's main purpose is to create finder charts matching what
-an observer at the Harlen J. Smith 2.7 meter telescope at McDonald 
-Observatory sees in the FOV of the IGRINS Slit View Camera.
+an observer sees in the FOV of the IGRINS Slit View Camera at the Discovery 
+Channel Telescope at Lowell Observtoary or the Harlen J. Smith 2.7 meter telescope at McDonald 
+Observatory.
 
 This program creates the following charts:
 * Telescope observing limits chart showing RA and Dec.
@@ -15,19 +16,24 @@ This program creates the following charts:
 Should be compatible with any OS that can run python and DS9 from a
 command line.
 
-Successfully tested on Mac OS 10.6.8, 10.9.4, 10.11.5
-Unable to get to run on Windows (e-mail me if you can get it to work)
-Probably will work on Linux machines, but untested.
+Successfully tested on Mac OS 10.6.8, 10.9.4, 10.11.5, and 10.12.1.
+Works on Linux, tested successfully on Ubuntu.
+I have seen it work on Windows but am not exactly sure how to set it up (e-mail me if you have done this)
 
 ##Requirements
-* DS9 7.5 b1, callable from the command line (might work on earlier
-versions)
+* DS9, callable from the command line.  The best version to currently use is the DS9 beta Version 7.5rc2 http://ds9.si.edu/site/Beta.html (also works fine for some version of DS9 7.2-7.4,
+ but I have seen 7.4 this cause issues for some people, this is solved by using the 7.5rc2 beta)
 * XPA for allowing commands to be given to DS9 from the command line
 * Python 2.7 (untested on other versions)
 * Scipy
 * Matplotlib
 
 ##Version Notes
+###(October 2016) Changes for V1.6
+* Updated to allow for use on multiple telescopes.  This primarily is set by the IGRINS SVC plate scale.  Current default is set for the DCT.  To change telescopes to 2.7m at McDonald or DCT, copy the text from options_mcd.inp or options_dct.inp to options.inp.  You can also modify options.inp to match any future telescope that IGRINS might be installed on.
+* Increased resolution of mosaiced 2MASS images downloaded for finder charts.  Should make it easier to see things.
+
+
 ###(June 2016) Changes for V1.5
 * 2MASS images are finally mosaiced! No more finder charts where only half of the field is shown.  This takes advantages of new features in the lastest version of DS9 so please make sure your DS9 is up to date.
 * Updated rotation encoder at PA=90 deg. from 636 to 633 to now report the correct new encoder setting when IGRINS is mounted on the McDonald Observatory 2.7m telescope.
@@ -84,6 +90,8 @@ should work fine
 * Corrected rotating the view in DS9 when loading user specified fits
  files
 
+
+
 ##How To Run
 To run type:
 "python observability.py"
@@ -93,6 +101,7 @@ You will be prompted to enter an input file
 so you will type in the name of the input file you would like to
     use...
 "Enter name of intput file: input/star.inp"
+
 
 ##Making/Modifying Input Files
 
@@ -155,19 +164,44 @@ If you want to use your own fits file for the finder charts in ds9,
 ###User-Supplied FITS File
 /path/to/image.fits will fits file path for making finder chart, leave blank if you just want to use 2MASS K-band
 
+
+
+
+##Setting which telescope to use and other  options
+All telescope settings are stored in the options.
+By default, the telescope used is the Discovery Channel Telescope (DCT). 
+
+To set which telescope to use:
+Copy 'options_mcd.inp' to 'options.inp' to use the settings for the 2.7m telescope at McDonald Observatory
+Copy 'options_dct.inp' to 'options.inp' to use the settings for the Discovery Channel Telescope
+
+The 'options.inp' file allows you change the following settings:
+
+  Value                     |Description                                  
+  :--------------------------:| -------------------------------------------- 
+	333.0					  | Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
+	34.7444					  | Latitude of observatory (degrees north)
+	-111.4222				  | Longitude of observatory  (degrees west)
+	5.0						  | Set 2MASS image size to NxN arcmin
+	'k'						  | Set 2MASS near-infrared band ('h','j','k'), default is K-band to match SVC filter
+	0.0783					  | Slit View Camera plate-scale, arcsec per pixel, this will change the IGRINS SVC FOV and slit size
+	14.0					  | Dimmest K-band mag. to search for guide stars, brighter stars are typically better for guiding
+	2.0						  | Guide star search limit in RA in arcminutes from target, generally kept near the FOV limit
+	2.0						  | Guide star search limit in Dec. in arcminutes from target, generally kept near the FOV limit
+	20						  | Limit on number of brightest guide stars found near target (ie. 10 means find 10 the brightest stars)
+
+
+
 ##Troubleshooting
+* If the DS9 regions (the slit, FOV, and directional compass) do not show up correctly, you are likely using version 7.4 (or older) of DS9.  If that is the case, I highly reccomend you update DS9 to the beta Version 7.5rc2 (or later) which should solve the problem.
 * If you get an error on the function `name_query` or when trying to download a 2MASS image in DS9 you might need to connect to the internet.
  IGRINS Observability looks up names of objects and grabs 2MASS images from the web.  If you provide coordinates for your target, and your own
  FITS file, you can run IGRINS Observability offline.
-* Sometimes 2MASS images don't fully cover the field of view.  This is a problem with how the 2MASS images
- are served over the internet to DS9, and cannot be easily fixed on our end.  If this is a major issue for you, you can create your own
- image mosiac (http://hachi.ipac.caltech.edu:8080/montage/), save it to your drive, and set it as the user supplied fits file.
- This is something I plan on fixing some point in the future.  If you know how to create 2MASS mosaics in python or DS9, please let me know.
 
-Email me at kfkaplan@astro.as.utexas.edu if you have any issues or find a bug.
+
+Post an issue here on github or email me at kfkaplan@astro.as.utexas.edu if you have any issues or find a bug.
 
 ##Future Plans
 * Integrate with the IGRINS Finder Chart Package (FCP) and/or Slit-View Camera Package (SCP)
     * It should probably be something simple like clicking a button and haveing a finder chart load up in DS9.
-* Automatically load 2MASS mosiacs instead of the 2MASS strips currently used in DS9, to ensure full coverage of the FOV.
 * Automated batch processing of a list of multiple targets, saving finder charts as image files.

@@ -2,12 +2,9 @@
 333.0		#Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
 30.6714		#Latitude of observatory (deg. north), FOR MCDONALD OBSERVATORY 2.7M
 104.0225	#Longitude of observatory  (deg. west), FOR MCDONALD OBSERVATORY 2.7M
-34.7444	#Latitude of observatory (deg. north), FOR DCT
--111.4222	#Longitude of observatory  (deg. west), FOR DCT
 6.0		#Set 2MASS image size to NxN arcmin
 'k'		#Set 2MASS band ('h','j','k')
 0.119		#Slit View Camera plate-scale, arcsec per pixel, FOR MCDONALD OBSERVATORY 2.7M
-0.079333		#Slit View Camera plate-scale, arcsec per pixel, FOR DCT
 14.0		#Guide star search K-band mag. limit, the dimmest K-band mag. to search for guide stars
 3.0		#Guide star search delta-RA limit (in arcmin) from  target, FOR MCDONALD OBSERVATORY 2.7M
 3.0		#Guide star search delta-Dec. limit (in arcmin) from target, FOR MCDONALD OBSERVATORY 2.7M
