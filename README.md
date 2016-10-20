@@ -21,7 +21,7 @@ Works on Linux, tested successfully on Ubuntu.
 I have seen it work on Windows but am not exactly sure how to set it up (e-mail me if you have done this)
 
 ##Requirements
-* DS9, callable from the command line.  The best version to currently use is the DS9 beta Version 7.5rc2 http://ds9.si.edu/site/Beta.html (also works fine for some version of DS9 7.2-7.4,
+* DS9, callable from the command line.  The best version to currently use is the DS9 beta Version 7.5rc2 http://ds9.si.edu/site/Beta.html (also works fine for some versions of DS9 7.2-7.4,
  but I have seen 7.4 this cause issues for some people, this is solved by using the 7.5rc2 beta)
 * XPA for allowing commands to be given to DS9 from the command line
 * Python 2.7 (untested on other versions)
@@ -168,12 +168,12 @@ If you want to use your own fits file for the finder charts in ds9,
 
 
 ##Setting which telescope to use and other  options
-All telescope settings are stored in the options.
+All telescope settings are stored in the "options.inp" file.
 By default, the telescope used is the Discovery Channel Telescope (DCT). 
 
 To set which telescope to use:
-Copy 'options_mcd.inp' to 'options.inp' to use the settings for the 2.7m telescope at McDonald Observatory
-Copy 'options_dct.inp' to 'options.inp' to use the settings for the Discovery Channel Telescope
+*Copy 'options_mcd.inp' to 'options.inp' to use the settings for the 2.7m telescope at McDonald Observatory.
+*Copy 'options_dct.inp' to 'options.inp' to use the settings for the Discovery Channel Telescope.
 
 The 'options.inp' file allows you change the following settings:
 
