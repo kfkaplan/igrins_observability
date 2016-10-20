@@ -172,8 +172,8 @@ All telescope settings are stored in the "options.inp" file.
 By default, the telescope used is the Discovery Channel Telescope (DCT). 
 
 To set which telescope to use:
-*Copy 'options_mcd.inp' to 'options.inp' to use the settings for the 2.7m telescope at McDonald Observatory.
-*Copy 'options_dct.inp' to 'options.inp' to use the settings for the Discovery Channel Telescope.
+* Copy 'options_mcd.inp' to 'options.inp' to use the settings for the 2.7m telescope at McDonald Observatory.
+* Copy 'options_dct.inp' to 'options.inp' to use the settings for the Discovery Channel Telescope.
 
 The 'options.inp' file allows you change the following settings:
 
