@@ -1,5 +1,5 @@
 #Set various options for observability.py
-333.0		#Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
+133.0		#Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
 30.6714		#Latitude of observatory (deg. north), FOR MCDONALD OBSERVATORY 2.7M
 104.0225	#Longitude of observatory  (deg. west), FOR MCDONALD OBSERVATORY 2.7M
 6.0		#Set 2MASS image size to NxN arcmin
