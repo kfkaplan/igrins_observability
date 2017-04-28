@@ -192,27 +192,28 @@ if show_finder_chart == 'y':
     #ds9.wait(2.0) #Used to be needed, commented out for now because I think I fixed this bug and can now speed things up
     ds9.set('single')  #set single display mode
     if finder_chart_fits == '':  #Use built in skyserver if no user specified fits file is found
-        #Use HEASARC Sky View server to get mosaicced 2MASS images, to get rid of bug from where images got sliced from the 2MASS server
-        ds9.set('skyview survey 2MASS-'+band) #Use HEASARC Sky View server to get mosaicced 2MASS images
-        ds9.set('skyview pixels 600 600') #Set resoultion of image retrieved
-        ds9.set('skyview size '+ str(img_size) + ' ' + str(img_size) + ' arcmin')#Set size of image
-        if obj_choice == '2':  #If user specifies object name
-           ds9.set('skyview name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
-        else:  #If user specifies object coordiantes
-           ds9.set('skyview coord ' + str(obj_coords.ra.deg()) + ' ' + str(
-               obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
-        ds9.set('skyview close') #Close skyserver window
-        #Old 2MASS server commented out for now, probably obselete, using HEASARC Sky View server now
-        #ds9.set('2mass close')  #Close 2MASS window
-        #ds9.set('2mass survey ' + band)  #Load 2MASS survey
-        #ds9.set('2mass size ' + str(img_size) + ' ' + str(
-        #    img_size) + ' arcmin')  #Set size of image (weird issues here, only strips extracted)
-        #if obj_choice == '2':  #If user specifies object name
-        #    ds9.set('2mass name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
-        #else:  #If user specifies object coordiantes
-        #    ds9.set('2mass coord ' + str(obj_coords.ra.deg()) + ' ' + str(
+        # #Use HEASARC Sky View server to get mosaicced 2MASS images, to get rid of bug from where images got sliced from the 2MASS server
+        # ds9.set('skyview survey 2MASS-'+band) #Use HEASARC Sky View server to get mosaicced 2MASS images
+        # ds9.set('skyview pixels 600 600') #Set resoultion of image retrieved
+        # ds9.set('skyview size '+ str(img_size) + ' ' + str(img_size) + ' arcmin')#Set size of image
+        # if obj_choice == '2':  #If user specifies object name
+        #    ds9.set('skyview name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
+        # else:  #If user specifies object coordiantes
+        #    ds9.set('skyview coord ' + str(obj_coords.ra.deg()) + ' ' + str(
         #        obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
-        #ds9.set('2mass close')  #Close 2MASS window
+        # ds9.set('skyview close') #Close skyserver window
+        #Old 2MASS server commented out for now, probably obselete, using HEASARC Sky View server now
+        #HEASARC Sky Viewer server does not appear to be working anymore in DS9 so falling back on the old 2MASS image server, it's not ideal but it should work (mostly)
+        ds9.set('2mass close')  #Close 2MASS window
+        ds9.set('2mass survey ' + band)  #Load 2MASS survey
+        ds9.set('2mass size ' + str(img_size) + ' ' + str(
+           img_size) + ' arcmin')  #Set size of image (weird issues here, only strips extracted)
+        if obj_choice == '2':  #If user specifies object name
+           ds9.set('2mass name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
+        else:  #If user specifies object coordiantes
+           ds9.set('2mass coord ' + str(obj_coords.ra.deg()) + ' ' + str(
+               obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
+        ds9.set('2mass close')  #Close 2MASS window
     else:  #If user does specify their own fits file, use it
         ds9.set('fits ' + finder_chart_fits)  #Load fits fits file
     ds9.set('scale log')  #Set view to log scale
