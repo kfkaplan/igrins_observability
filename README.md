@@ -32,7 +32,7 @@ I have seen it work on Windows but am not exactly sure how to set it up (e-mail 
 ## Version Notes
 
 ### (May 2018) Changes for V1.7
-* Switched from custom DS9 XPA commands to using pyds9 (http://hea-www.harvard.edu/RD/pyds9/).  For the code to run now, you need to install pyds9 on your system.  Switching to pyds9 increases compatibility with newer operating systems to ensure observabilty.py .
+* Switched from custom DS9 XPA commands to using pyds9 (http://hea-www.harvard.edu/RD/pyds9/).  For the code to run now, you need to install pyds9 on your system.  Switching to pyds9 increases compatibility with newer operating systems.
 * Fixed issues with using 2MASS image mosaics for the finder charts.  They should work properly now if you were having issues.
 
 ### (October 2016) Changes for V1.6
@@ -200,7 +200,7 @@ The 'options.inp' file allows you change the following settings:
 
 
 ## Troubleshooting
-* If the DS9 regions (the slit, FOV, and directional compass) do not show up correctly, you are likely using version 7.4 (or older) of DS9.  If that is the case, I highly reccomend you update DS9 to Version 7.6 (or later) which should solve the problem.
+* If the DS9 regions (the slit, FOV, and directional compass) do not show up correctly, you are likely using version 7.4 (or older) of DS9.  If that is the case, I highly recommend you update DS9 to Version 7.6 (or later) which should solve the problem.
 * If you get an error on the function `name_query` or when trying to download a 2MASS image in DS9 you might need to connect to the internet.
  IGRINS Observability looks up names of objects and grabs 2MASS images from the web.  If you provide coordinates for your target, and your own
  FITS file, you can run IGRINS Observability offline.
