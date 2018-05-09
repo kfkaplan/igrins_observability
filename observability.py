@@ -9,12 +9,14 @@ Program makes the following
 '''This function creates the region file for the IGRINS Slit View Camera (SVC) FOV
 Rotation in Position Angle is accounted for via rotation matrix for the 
 polygon used to represent the SVC FOV'''
-def create_region_template(rotation, plate_scale, guidestar_dra, guidestar_ddec, guidestar_sl, guidestar_sw):
+def create_region_template(rotation, plate_scale, guidestar_dra, guidestar_ddec, guidestar_sl, guidestar_sw, mirror_field):
     zoom =  plate_scale / 0.119 #Set zoom scale to scale the FOV, the McDonald Observatory 2.7m plate scale is 0.119 so changing the plate scale in the options.inp file 
     default_slit_angle = 359.98672  #Default angle of the slit (East to west)
     x, y, poly_x, poly_y = loadtxt('scam-outline.txt', unpack=True) #Outline of SVC FOV, thanks to Henry Roe (private communication)
     poly_x = poly_x / 3600.0 #Convert arcseconds to degrees
     poly_y = poly_y / 3600.0
+    if mirror_field: #If SCV field is mirrored (e.g. on DCT)...
+        poly_y = -poly_y  #Mirror the polygon describing the FOV of the SCV
     # poly_x = [0.02714, 0.02712, 0.02593, 0.02462, 0.02412, 0.02422, 0.02429,  #Old polygon, now using new one from Henry Roe
     #           #Default x values for points in FOV polygon
     #           -0.00265, -0.02095, -0.02338, -0.02403, -0.02681, -0.02677, -0.02518,
@@ -61,12 +63,20 @@ from scipy.interpolate import \
     InterpolatedUnivariateSpline  #Import interpolation for interpolating telescope HA & Dec. observing limits
 from coordfuncs import *  #Import coordfuncs for handing spherical astronomy and coordinates
 import ds9  #Import wrapper for allowing python script DS9 with XPA
-import sys
+import sys, os
+
+#Grab path to current working directory
+current_working_directory = os.getcwd() + '/'
 
 #Read in telescope options input
 input_file = 'options.inp'  #Path to options file
 paths = open(input_file)  #open options file
 skip = paths.readline()  #Skip first line of options list
+mirror_field = str.strip(paths.readline().split('\t')[0]) #Mirror field (needed for DCT)
+if mirror_field == 'False': #Convert string to boolean
+    mirror_field = False
+else:
+    mirror_field = True
 rotator_zero_point = float(str.strip(paths.readline().split('\t')[0]))  #Zero point for the rotator where PA=90 degrees
 observatory_latitude = float(
     str.strip(paths.readline().split('\t')[0]))  #Latitude of the observatory (probably never need to change)
@@ -192,28 +202,29 @@ if show_finder_chart == 'y':
     #ds9.wait(2.0) #Used to be needed, commented out for now because I think I fixed this bug and can now speed things up
     ds9.set('single')  #set single display mode
     if finder_chart_fits == '':  #Use built in skyserver if no user specified fits file is found
-        # #Use HEASARC Sky View server to get mosaicced 2MASS images, to get rid of bug from where images got sliced from the 2MASS server
-        # ds9.set('skyview survey 2MASS-'+band) #Use HEASARC Sky View server to get mosaicced 2MASS images
-        # ds9.set('skyview pixels 600 600') #Set resoultion of image retrieved
-        # ds9.set('skyview size '+ str(img_size) + ' ' + str(img_size) + ' arcmin')#Set size of image
-        # if obj_choice == '2':  #If user specifies object name
-        #    ds9.set('skyview name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
-        # else:  #If user specifies object coordiantes
-        #    ds9.set('skyview coord ' + str(obj_coords.ra.deg()) + ' ' + str(
-        #        obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
-        # ds9.set('skyview close') #Close skyserver window
+        #Use HEASARC Sky View server to get mosaicced 2MASS images, to get rid of bug from where images got sliced from the 2MASS server
+        ds9.set('skyview open')
+        ds9.set('skyview pixels 900 900') #Set resoultion of image retrieved
+        ds9.set('skyview size '+ str(img_size) + ' ' + str(img_size) + ' arcmin')#Set size of image
+        ds9.set('skyview survey 2MASS-'+band) #Use HEASARC Sky View server to get mosaicced 2MASS images
+        if obj_choice == '2':  #If user specifies object name
+           ds9.set('skyview name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
+        else:  #If user specifies object coordiantes
+           ds9.set('skyview coord ' + str(obj_coords.ra.deg()) + ' ' + str(
+               obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
+        ds9.set('skyview close') #Close skyserver window
         #Old 2MASS server commented out for now, probably obselete, using HEASARC Sky View server now
         #HEASARC Sky Viewer server does not appear to be working anymore in DS9 so falling back on the old 2MASS image server, it's not ideal but it should work (mostly)
-        ds9.set('2mass close')  #Close 2MASS window
-        ds9.set('2mass survey ' + band)  #Load 2MASS survey
-        ds9.set('2mass size ' + str(img_size) + ' ' + str(
-           img_size) + ' arcmin')  #Set size of image (weird issues here, only strips extracted)
-        if obj_choice == '2':  #If user specifies object name
-           ds9.set('2mass name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
-        else:  #If user specifies object coordiantes
-           ds9.set('2mass coord ' + str(obj_coords.ra.deg()) + ' ' + str(
-               obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
-        ds9.set('2mass close')  #Close 2MASS window
+        # ds9.set('2mass close')  #Close 2MASS window
+        # ds9.set('2mass survey ' + band)  #Load 2MASS survey
+        # ds9.set('2mass size ' + str(img_size) + ' ' + str(
+        #    img_size) + ' arcmin')  #Set size of image (weird issues here, only strips extracted)
+        # if obj_choice == '2':  #If user specifies object name
+        #    ds9.set('2mass name ' + obj_input.replace(" ", "_"))  #Retrieve 2MASS image
+        # else:  #If user specifies object coordiantes
+        #    ds9.set('2mass coord ' + str(obj_coords.ra.deg()) + ' ' + str(
+        #        obj_coords.dec.deg()) + ' degrees')  #Retrieve 2MASS image
+        # ds9.set('2mass close')  #Close 2MASS window
     else:  #If user does specify their own fits file, use it
         ds9.set('fits ' + finder_chart_fits)  #Load fits fits file
     ds9.set('scale log')  #Set view to log scale
@@ -247,15 +258,17 @@ if show_finder_chart == 'y':
             radians(PA - 90.0))  #guide star position relative to slit in arcseconds
 
     create_region_template(delta_PA, plate_scale, gstar_dra_deg, gstar_ddec_deg, gstar_sl,
-                           gstar_sw)  #Make region template file rotated and the specified PA
-    ds9.set(
-        'regions template IGRINS_svc_generated.tpl at ' + obj_coords.showcoords() + ' fk5')  #Read in regions template file
+                           gstar_sw, mirror_field)  #Make region template file rotated and the specified PA
+    #ds9.set(
+    #    'regions template IGRINS_svc_generated.tpl at ' + obj_coords.showcoords() + ' fk5')  #Read in regions template file
+    ds9.set('regions template ' + current_working_directory + 'IGRINS_svc_generated.tpl at ' + obj_coords.showcoords() + ' fk5')
     ds9.set('regions select all')
     ds9.set('regions group FOV new')
     ds9.set('regions select none')  #Deslect regions when finished
     ds9.set(
         'align yes')  #Set north to be up and east to be left, before rotating, for weird fits files that open at odd angles
     ds9.rotto(-45 + delta_PA)  #Set orientation to match IGRINS guider
+
     ds9.set('pan to ' + obj_coords.showcoords() + ' wcs fk5')  #Center frame on target object
     ds9.set('zoom 0.8')  #Try to set the zoom to easily see the IGRINS FOV
     ds9.set('mode pointer')  #Go to this standard editing mode in DS9
@@ -271,14 +284,14 @@ if show_finder_chart == 'y':
                 + "&&$Kmag<=" + str(gstar_mag_limit) + "'")  #Load catalog
         ds9.set(
             "catalog sort 'Kmag' incr")  #Sort list by starting from brightest K-band mag. and getting dimmer as you go down
-        ds9.set("catalog export tsv tmp.dat")  #Save catalog list as a tab seperated value file for later trimming
+        ds9.set("catalog export tsv " + current_working_directory + "tmp.dat")  #Save catalog list as a tab seperated value file for later trimming
         lines = open('tmp.dat').readlines()  #Open catalog list tsv file into memory
         if len(lines) > 1:
             open('tmp.dat', 'w').writelines(
                 lines[0:n_gstars + 1])  #Truncate by maximum number of guide stars and save catalog list
             ds9.set('catalog clear')  #Clear 2MASS catalog
             ds9.set('catalog close')  #Close 2MASS catalog window
-            ds9.set('catalog import tsv tmp.dat')  #Load only brightest stars to be potential guide stars
+            ds9.set('catalog import tsv ' + current_working_directory + 'tmp.dat')  #Load only brightest stars to be potential guide stars
             ds9.set(
                 'mode catalog')  #Set mode to catalog so user can click on possible guide stars and look at their stats
             gra, gdec, gmag = loadtxt('tmp.dat', usecols=(0, 1, 9), delimiter='\t', unpack=True,

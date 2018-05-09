@@ -1,6 +1,6 @@
-#IGRINS Observability Version 1.6
+# IGRINS Observability Version 1.7
 Written by Kyle Kaplan (@kfkaplan)
-Email: kfkaplan@astro.as.utexas.edu
+Email: kfkaplan@email.arizona.edu
 
 This python program's main purpose is to create finder charts matching what
 an observer sees in the FOV of the IGRINS Slit View Camera at the Discovery 
@@ -12,34 +12,40 @@ This program creates the following charts:
 * Altitude chart for target vs. LST showing the telescope observing limits
 * Finder chart for IGRINS Slit View Camera
 
-##Compatible Operating Systems
+## Compatible Operating Systems
 Should be compatible with any OS that can run python and DS9 from a
 command line.
 
-Successfully tested on Mac OS 10.6.8, 10.9.4, 10.11.5, and 10.12.1.
+Successfully tested on Mac OS 10.6.8, 10.9.4, 10.11.5, 10.12.1, and 10.12.6.
 Works on Linux, tested successfully on Ubuntu.
 I have seen it work on Windows but am not exactly sure how to set it up (e-mail me if you have done this)
 
-##Requirements
-* DS9, callable from the command line.  The best version to currently use is the DS9 beta Version 7.5rc2 http://ds9.si.edu/site/Beta.html (also works fine for some versions of DS9 7.2-7.4,
- but I have seen 7.4 this cause issues for some people, this is solved by using the 7.5rc2 beta)
+## Requirements
+* DS9, callable from the command line.  The best version to currently use is the DS9 Version 7.6 http://ds9.si.edu/ (also works fine for some versions of DS9 7.2-7.4,
+ but I have seen 7.4 this cause issues for some people, this is solved by using the 7.6)
 * XPA for allowing commands to be given to DS9 from the command line
 * Python 2.7 (untested on other versions)
+* pyds9 (http://hea-www.harvard.edu/RD/pyds9/)
 * Scipy
 * Matplotlib
 
-##Version Notes
-###(October 2016) Changes for V1.6
+## Version Notes
+
+### (May 2018) Changes for V1.7
+* Switched from custom DS9 XPA commands to using pyds9 (http://hea-www.harvard.edu/RD/pyds9/).  For the code to run now, you need to install pyds9 on your system.  Switching to pyds9 increases compatibility with newer operating systems to ensure observabilty.py .
+* Fixed issues with using 2MASS image mosaics for the finder charts.  They should work properly now if you were having issues.
+
+### (October 2016) Changes for V1.6
 * Updated to allow for use on multiple telescopes.  This primarily is set by the IGRINS SVC plate scale.  Current default is set for the DCT.  To change telescopes to 2.7m at McDonald or DCT, copy the text from options_mcd.inp or options_dct.inp to options.inp.  You can also modify options.inp to match any future telescope that IGRINS might be installed on.
 * Increased resolution of mosaiced 2MASS images downloaded for finder charts.  Should make it easier to see things.
 
 
-###(June 2016) Changes for V1.5
+### (June 2016) Changes for V1.5
 * 2MASS images are finally mosaiced! No more finder charts where only half of the field is shown.  This takes advantages of new features in the lastest version of DS9 so please make sure your DS9 is up to date.
 * Updated rotation encoder at PA=90 deg. from 636 to 633 to now report the correct new encoder setting when IGRINS is mounted on the McDonald Observatory 2.7m telescope.
 * Various other minor imporvements and bug fixes over the past year and a half.
 
-###(Dec 2014) Changes since V1.4
+### (Dec 2014) Changes since V1.4
 * NEW FEATURE! Load input files from the command line! Thank you
 Kevin Guillikson for adding this feature
 * Coordinate grid is now displayed in DS9
@@ -48,7 +54,7 @@ turned off)
 * Bug fix: Declinations of -00 deg used to be read in as +00, now
 should work fine
 
-###(Sept. 2014) Changes since V1.3:
+### (Sept. 2014) Changes since V1.3:
 * NEW FEATURE! Automatically find guide stars by setting the input
  for guide star to 4 and displays them in DS9 and command line with
  K- mag, SL, SW
@@ -69,7 +75,7 @@ should work fine
 * Bug fix: Fixed a bug where program fails if RA seconds has a
  decimal < .1.
 
-###(July 24, 2014) Changes since V1.2:
+### (July 24, 2014) Changes since V1.2:
 * Astropy is no longer required to run the code
 * Added text output in ds9 showing slit view camera coordinates if
  using an off slit guide star
@@ -92,7 +98,7 @@ should work fine
 
 
 
-##How To Run
+## How To Run
 To run type:
 "python observability.py"
 
@@ -103,7 +109,7 @@ so you will type in the name of the input file you would like to
 "Enter name of intput file: input/star.inp"
 
 
-##Making/Modifying Input Files
+## Making/Modifying Input Files
 
 All the input files are stored in the "input" directory.
 All user inputs must end with at leat one tab.
@@ -113,7 +119,7 @@ The first set of options in the input file denote which charts the
     program will make.
 If you are only interested in the finder charts, set the first two
     options to 'n' while leaving the third option set to 'y'.
-###Select Charts To Display
+### Select Charts To Display
 
   Value        |Description                                  
   :-----------:| -------------------------------------------- 
@@ -129,7 +135,7 @@ Below that is the target object where the slit is placed can be
 The final line is where you input the name or coordinates of the
     target object.
 
-###Information on Target
+### Information on Target
 
   Value                     |Description                                  
   :------------------------:| -------------------------------------------- 
@@ -149,7 +155,7 @@ To automatically find guide stars set this to '4'.  DS9 and the
 Below that you put in the name or coordinates for a guide star, if
     you are specifying one with option '1' or '2'.
 
-###Information on Guide Star
+### Information on Guide Star
 
   Value                     |Description                                  
   :--------------------------:| -------------------------------------------- 
@@ -161,13 +167,13 @@ If you want to use your own fits file for the finder charts in ds9,
     put the path here to the fits file, leave blank to default to
     the 2MASS K-band images
 
-###User-Supplied FITS File
+### User-Supplied FITS File
 /path/to/image.fits will fits file path for making finder chart, leave blank if you just want to use 2MASS K-band
 
 
 
 
-##Setting which telescope to use and other  options
+## Setting which telescope to use and other  options
 All telescope settings are stored in the "options.inp" file.
 By default, the telescope used is the Discovery Channel Telescope (DCT). 
 
@@ -183,7 +189,7 @@ The 'options.inp' file allows you change the following settings:
 	34.7444					  | Latitude of observatory (degrees north)
 	-111.4222				  | Longitude of observatory  (degrees west)
 	5.0						  | Set 2MASS image size to NxN arcmin
-	'k'						  | Set 2MASS near-infrared band ('h','j','k'), default is K-band to match SVC filter
+	k						  | Set 2MASS near-infrared band ('h','j','k'), default is K-band to match SVC filter
 	0.0783					  | Slit View Camera plate-scale, arcsec per pixel, this will change the IGRINS SVC FOV and slit size
 	14.0					  | Dimmest K-band mag. to search for guide stars, brighter stars are typically better for guiding
 	2.0						  | Guide star search limit in RA in arcminutes from target, generally kept near the FOV limit
@@ -192,7 +198,7 @@ The 'options.inp' file allows you change the following settings:
 
 
 
-##Troubleshooting
+## Troubleshooting
 * If the DS9 regions (the slit, FOV, and directional compass) do not show up correctly, you are likely using version 7.4 (or older) of DS9.  If that is the case, I highly reccomend you update DS9 to the beta Version 7.5rc2 (or later) which should solve the problem.
 * If you get an error on the function `name_query` or when trying to download a 2MASS image in DS9 you might need to connect to the internet.
  IGRINS Observability looks up names of objects and grabs 2MASS images from the web.  If you provide coordinates for your target, and your own
