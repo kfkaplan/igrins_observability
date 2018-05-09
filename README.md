@@ -183,21 +183,10 @@ To set which telescope to use:
 
 The 'options.inp' file allows you change the following settings:
 
-  Value                     |Description                                  
-  :--------------------------:| -------------------------------------------- 
-	333.0					  | Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
-	34.7444					  | Latitude of observatory (degrees north)
-	-111.4222				  | Longitude of observatory  (degrees west)
-	5.0						  | Set 2MASS image size to NxN arcmin
-	k						  | Set 2MASS near-infrared band ('h','j','k'), default is K-band to match SVC filter
-	0.0783					  | Slit View Camera plate-scale, arcsec per pixel, this will change the IGRINS SVC FOV and slit size
-	14.0					  | Dimmest K-band mag. to search for guide stars, brighter stars are typically better for guiding
-	2.0						  | Guide star search limit in RA in arcminutes from target, generally kept near the FOV limit
-	2.0						  | Guide star search limit in Dec. in arcminutes from target, generally kept near the FOV limit
-	20						  | Limit on number of brightest guide stars found near target (ie. 10 means find 10 the brightest stars)
 
 ```
-Value Description
+#Value   Description
+#-----------------
 False #Mirror field ('True' for DCT, 'False' for McDonald Obs.)
 133.0   #Instrument rotator zero point (Default East-West setting has PA = 90 deg.)
 30.6714   #Latitude of observatory (deg. north), FOR MCDONALD OBSERVATORY 2.7M
