@@ -200,15 +200,16 @@ The 'options.inp' file allows you change the following settings:
 
 
 ## Troubleshooting
-* If the DS9 regions (the slit, FOV, and directional compass) do not show up correctly, you are likely using version 7.4 (or older) of DS9.  If that is the case, I highly reccomend you update DS9 to the beta Version 7.5rc2 (or later) which should solve the problem.
+* If the DS9 regions (the slit, FOV, and directional compass) do not show up correctly, you are likely using version 7.4 (or older) of DS9.  If that is the case, I highly reccomend you update DS9 to Version 7.6 (or later) which should solve the problem.
 * If you get an error on the function `name_query` or when trying to download a 2MASS image in DS9 you might need to connect to the internet.
  IGRINS Observability looks up names of objects and grabs 2MASS images from the web.  If you provide coordinates for your target, and your own
  FITS file, you can run IGRINS Observability offline.
 
 
-Post an issue here on github or email me at kfkaplan@astro.as.utexas.edu if you have any issues or find a bug.
+Post an issue here on github or email me at kfkaplan@email.arizona.edu if you have any issues or find a bug.
 
 ##Future Plans
+* Add option to create finder charts for Gemini South, if people need it.
 * Integrate with the IGRINS Finder Chart Package (FCP) and/or Slit-View Camera Package (SCP)
     * It should probably be something simple like clicking a button and haveing a finder chart load up in DS9.
 * Automated batch processing of a list of multiple targets, saving finder charts as image files.
