@@ -1,6 +1,6 @@
-# IGRINS Observability Version 1.7
+# IGRINS Observability Version 1.8
 Written by Kyle Kaplan (@kfkaplan)
-Email: kfkaplan@email.arizona.edu
+Email: kkaplan@usra.edu
 
 This python program's main purpose is to create finder charts matching what
 an observer sees in the FOV of the IGRINS Slit View Camera at the Discovery 
@@ -16,20 +16,21 @@ This program creates the following charts:
 Should be compatible with any OS that can run python and DS9 from a
 command line.
 
-Successfully tested on Mac OS 10.6.8, 10.9.4, 10.11.5, 10.12.1, and 10.12.6.
-Works on Linux, tested successfully on Ubuntu.
+Successfully tested on Mac OS 10.15.7.
+Most likely works on Linux.
 I have seen it work on Windows but am not exactly sure how to set it up (e-mail me if you have done this)
 
 ## Requirements
-* DS9, callable from the command line.  The best version to currently use is the DS9 Version 7.6 http://ds9.si.edu/ (also works fine for some versions of DS9 7.2-7.4,
- but I have seen 7.4 this cause issues for some people, this is solved by using the 7.6)
+* DS9, callable from the command line.  The best version to currently use is the DS9 Version 8.2.1 http://ds9.si.edu/ (also might work fine for older versions)
 * XPA for allowing commands to be given to DS9 from the command line
-* Python 2.7 (untested on other versions)
+* Python 3 (might work in 2 but not guarantee)
 * pyds9 (http://hea-www.harvard.edu/RD/pyds9/)
-* Scipy
-* Matplotlib
+* astroquery (optional but reccomended)
 
 ## Version Notes
+
+### (April 2021) Changes for V1.8
+* Updated code to make it compatible with Python 3.  It probably will no longer work in Python 2.
 
 ### (May 2018) Changes for V1.7
 * Switched from custom DS9 XPA commands to using pyds9 (http://hea-www.harvard.edu/RD/pyds9/).  For the code to run now, you need to install pyds9 on your system.  Switching to pyds9 increases compatibility with newer operating systems.
@@ -200,13 +201,13 @@ The 'options.inp' file allows you change the following settings:
 
 
 ## Troubleshooting
-* If the DS9 regions (the slit, FOV, and directional compass) do not show up correctly, you are likely using version 7.4 (or older) of DS9.  If that is the case, I highly recommend you update DS9 to Version 7.6 (or later) which should solve the problem.
+* If the DS9 regions (the slit, FOV, and directional compass) do not show up correctly, you are likely using version 7.4 (or older) of DS9.  If that is the case, I highly recommend you update DS9 to the latest version which should solve the problem.
 * If you get an error on the function `name_query` or when trying to download a 2MASS image in DS9 you might need to connect to the internet.
  IGRINS Observability looks up names of objects and grabs 2MASS images from the web.  If you provide coordinates for your target, and your own
  FITS file, you can run IGRINS Observability offline.
 
 
-Post an issue here on github or email me at kfkaplan@email.arizona.edu if you have any issues or find a bug.
+Post an issue here on github or email me at kkaplan@usra.edu if you have any issues or find a bug.
 
 ##Future Plans
 * Add option to create finder charts for Gemini South, if people need it.

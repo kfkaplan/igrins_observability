@@ -25,16 +25,16 @@ def OutputFile(outfilename, starname):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print "This script will create input files that are usable by observability.py"
-        print "type 'python MakeInputFiles.py csvfile [options]', where csvfile is the"
-        print "  filename of a comma-separated value table, and options are:"
-        print "\n"
-        print "-skip=n :  skip the n first lines of the table (contains header info or "
-        print "           something. Defaults to 1"
-        print "-delim=c : set the delimiter to the character 'c' (can be whatever you want)"
-        print "           Defaults to a comma"
-        print "-col=i :   The name of the star is in the ith column, starting at 0. "
-        print "           Defaults to 1."
+        print("This script will create input files that are usable by observability.py")
+        print("type 'python MakeInputFiles.py csvfile [options]', where csvfile is the")
+        print("  filename of a comma-separated value table, and options are:")
+        print("\n")
+        print("-skip=n :  skip the n first lines of the table (contains header info or ")
+        print("           something. Defaults to 1")
+        print("-delim=c : set the delimiter to the character 'c' (can be whatever you want)")
+        print("           Defaults to a comma")
+        print("-col=i :   The name of the star is in the ith column, starting at 0. ")
+        print("           Defaults to 1.")
     else:
         skip = 1
         delim = ","
@@ -55,5 +55,5 @@ if __name__ == "__main__":
         for line in lines[skip:]:
             segments = line.split(delim)
             starname = segments[col].strip('"').strip()
-            print starname
+            print(starname)
             OutputFile("input/{:s}.inp".format(starname.replace(" ", "_")), starname)

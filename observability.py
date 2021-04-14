@@ -57,7 +57,8 @@ def create_region_template(rotation, plate_scale, guidestar_dra, guidestar_ddec,
 
 #Import Python Libraries
 from pdb import set_trace as stop  #Use stop() for debugging
-from scipy import *  #Import scipy
+#from scipy import *  #Import scipy
+from numpy import * #Import numpy
 import matplotlib.pyplot as plt  #Import matplotlib's plotting routines
 from scipy.interpolate import \
     InterpolatedUnivariateSpline  #Import interpolation for interpolating telescope HA & Dec. observing limits
@@ -261,7 +262,9 @@ if show_finder_chart == 'y':
                            gstar_sw, mirror_field)  #Make region template file rotated and the specified PA
     #ds9.set(
     #    'regions template IGRINS_svc_generated.tpl at ' + obj_coords.showcoords() + ' fk5')  #Read in regions template file
-    ds9.set('regions template ' + current_working_directory + 'IGRINS_svc_generated.tpl at ' + obj_coords.showcoords() + ' fk5')
+    ds9.set('pan to '+obj_coords.showcoords() + ' wcs fk5')
+    #ds9.set('regions template ' + current_working_directory + 'IGRINS_svc_generated.tpl at ' + obj_coords.showcoords() + ' fk5')
+    ds9.set('regions template ' + current_working_directory + 'IGRINS_svc_generated.tpl')
     ds9.set('regions select all')
     ds9.set('regions group FOV new')
     ds9.set('regions select none')  #Deslect regions when finished
@@ -277,11 +280,11 @@ if show_finder_chart == 'y':
         gstar_dec_limit = gstar_dec_limit / (2.0 * 60.0)  #Convert limit in Dec. to degrees
         gstar_ra_limit = gstar_ra_limit / (2.0 * 60.0 * obj_coords.dec.cos())  #Convert limit in RA to degrees
         ds9.set('catalog 2mass')  #Initialize catalog
-        ds9.set("catalog filter '$RAJ2000>=" + str(obj_coords.ra.deg() - gstar_ra_limit) + "&&$RAJ2000<=" + str(
+        ds9.set('catalog filter "$RAJ2000>=' + str(obj_coords.ra.deg() - gstar_ra_limit) + '&&$RAJ2000<=' + str(
             obj_coords.ra.deg() + gstar_ra_limit) \
-                + "&&$DEJ2000>=" + str(obj_coords.dec.deg() - gstar_dec_limit) + "&&$DEJ2000<=" + str(
+                + '&&$DEJ2000>=' + str(obj_coords.dec.deg() - gstar_dec_limit) + '&&$DEJ2000<=' + str(
             obj_coords.dec.deg() + gstar_dec_limit) \
-                + "&&$Kmag<=" + str(gstar_mag_limit) + "'")  #Load catalog
+                + '&&$Kmag<=' + str(gstar_mag_limit) + '"')  #Load catalog
         ds9.set(
             "catalog sort 'Kmag' incr")  #Sort list by starting from brightest K-band mag. and getting dimmer as you go down
         ds9.set("catalog export tsv " + current_working_directory + "tmp.dat")  #Save catalog list as a tab seperated value file for later trimming
@@ -326,26 +329,26 @@ if show_finder_chart == 'y':
         else:
             ds9.set('catalog clear')  #Clear 2MASS catalog
             ds9.set('catalog close')  #Close 2MASS catalog window
-            print 'ERROR: No possible guide stars found. Check target position and then the mangitude, RA, & Dec limits in options.inp and retry.'
+            print('ERROR: No possible guide stars found. Check target position and then the mangitude, RA, & Dec limits in options.inp and retry.')
 
 
 
 #Print results to command line
-print ''
-print 'Object coordiantes (J2000):'
-print '	' + obj_coords.showcoords()
+print('')
+print('Object coordiantes (J2000):')
+print('	' + obj_coords.showcoords())
 #Display HH:MM for LST mins and maxes this object can be observed at
-print 'Object between the following Local Siderial Times:  '
-print '	', LST_min.hm() + ' ---> ' + LST_max.hm()
-print 'Rotator setting should be: '
-print '	', rotator_setting
+print('Object between the following Local Siderial Times:  ')
+print('	', LST_min.hm() + ' ---> ' + LST_max.hm())
+print('Rotator setting should be: ')
+print('	', rotator_setting)
 if gstar_choice != '0' and gstar_choice != '4' and show_finder_chart == 'y':  #If guide star actually put in
-    print 'Guide star:'
-    print '	ddra: ', "%7.2f" % gstar_dra_arcsec, ', ddec:', "%7.2f" % gstar_ddec_arcsec
-    print '	  dx: ', "%7.2f" % gstar_dx, ',   dy: ', "%7.2f" % gstar_dy
-    print '	  sl: ', "%7.2f" % gstar_sl, ',   sw: ', "%7.2f" % gstar_sw
+    print('Guide star:')
+    print('	ddra: ', "%7.2f" % gstar_dra_arcsec, ', ddec:', "%7.2f" % gstar_ddec_arcsec)
+    print('	  dx: ', "%7.2f" % gstar_dx, ',   dy: ', "%7.2f" % gstar_dy)
+    print('	  sl: ', "%7.2f" % gstar_sl, ',   sw: ', "%7.2f" % gstar_sw)
 if gstar_choice == '4' and show_finder_chart == 'y':
-    print '\n\t'.join(command_line_output)  #Output list of guide stars
+    print('\n\t'.join(command_line_output))  #Output list of guide stars
 
 #ds9.set('regions group FOV property move no') #Make FOV unmoveable, might change this later if this causes issues with folks
 ds9.set('regions group FOV moveback') #move regions such as the FOV, slit, compass, etc. to the back so the user can select guide star points

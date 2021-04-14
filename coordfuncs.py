@@ -2,18 +2,19 @@
 
 #Import python libraries
 from pdb import set_trace as stop #Use stop() for debugging
-from scipy import *
+#from scipy import *
+from numpy import * #Import numpy
 import urllib
+from six import string_types
 
-import urllib
 
 try:
     from astroquery.simbad import Simbad
     astroquery_import = True
 except ImportError:
     astroquery_import = False
-    print '\n\nWARNING! astroquery not found! Falling back to urllib! '
-    print 'This is less reliable for parsing object name --> ra/dec!\n\n'
+    print('\n\nWARNING! astroquery not found! Falling back to urllib! ')
+    print('This is less reliable for parsing object name --> ra/dec!\n\n')
 
 #Grab RA and Dec of object by looking up it's name
 #This function is a modified copy of https://gist.github.com/juandesant/5163782#file-sesame-py-L18
@@ -46,15 +47,15 @@ def name_query(target_name):
         # The coordinates are in the lines starting with %J
         coordinateList = filter(lambda x: x.find('%J') == 0, sesameResponse)
         # As filter returns a list, get the first line
-        print target_name
-        print coordinateList
+        print(target_name)
+        print(coordinateList)
         coordinates = coordinateList[0]
         # Split the coordinates between the spaces, and drop de first item (%J) (so, start from the second on)
         coordinates = coordinates.split(' ')[1:]
         ra = float(coordinates[0])
         dec = float(coordinates[1])
-        print ra, dec
-        print target_name
+        print(ra, dec)
+        print(target_name)
         return coords(ra, dec)  #Return a coordinate object
 
 #Input coordinates as a sexigasimal string and turn into a coords object
@@ -68,7 +69,7 @@ def coord_query(input_coords):
   else:
     ra = ValueError
     dec = ValueError
-    print 'ERROR: Coordinate format entered incorrect.'
+    print('ERROR: Coordinate format entered incorrect.')
   return coords(ra, dec)
 
 #Convert sexigasimal units to decimal degrees, need to speficy units as hours 'hms' or degrees 'dms'
@@ -111,8 +112,8 @@ def deg2sex(input, precision=1, sign='', units='dms'):
       s = 0.0
       m = m + 1.0
       if m >=60.0: #in the super dooper incredibly rare event that xx:59:59.99 rounds up
-	m = 0.0
-	x = x+1.0
+        m = 0.0
+        x = x+1.0
   if units == 'dms' or units == 'hms': #return everything in format "xx:xx:xx.xx"
     fmt = "%02d:%02d:%02d.%0"+str(int(precision))+"d" #Set up formatting for string that will hold the sexagesimal output
     sexagesimal = fmt % (int(x), int(m), int(s), round(fractional_s)) #Save sexagesimal output string
@@ -165,7 +166,7 @@ def dec_seperation(obj1, obj2, units='deg'):
 
 #Calculate altitude of target in the sky given target coords, observer location, and Local Siderial Time (LST)
 def alt(tar, loc, LST):
-  if isinstance(LST, basestring):
+  if isinstance(LST, string_types):
     LST_deg = sex2deg(LST) #Convert local siderial time into degrees
   else:
     LST_deg = LST * 15.0
@@ -192,7 +193,7 @@ class angle:
     self.theta = float(input_angle) #read in and store latitude
     self.precision = 2
   def check_angle_limit(self):
-    print 'ERROR: You are running the dummy check angle limit method.  Check overloading of methods.'
+    print('ERROR: You are running the dummy check angle limit method.  Check overloading of methods.')
   def deg(self): #Return latitude in decimal degrees
     self.check_angle_limit()
     return self.theta 
@@ -237,10 +238,10 @@ class latitude(angle):
     self.check_angle_limit()
   def check_angle_limit(self):
     if self.theta > 90.0:
-      print 'ERROR: Latitude angle > 90 degrees'
+      print('ERROR: Latitude angle > 90 degrees')
       self.theta = ValueError
     if self.theta < -90.0:
-      print 'ERROR: Latitude angle < 90 degrees'
+      print('ERROR: Latitude angle < 90 degrees')
       self.theta = ValueError
   
 #Class stores an angle betwseen 0 -> 360 degrees    
@@ -259,7 +260,7 @@ class longitude(angle):
 #Accessed like coords.ra.hour(), coords.dec.deg(), coords.ra.hms(), coords.dec.dms()
 class coords():
   def __init__(self, input_ra=0.0, input_dec=0.0):
-    if isinstance(input_ra, basestring): #If units sexigasimal, convert to decimal degrees
+    if isinstance(input_ra, string_types): #If units sexigasimal, convert to decimal degrees
       [input_ra, input_dec] = [sex2deg(input_ra, units='hms'), sex2deg(input_dec, units='dms')]
     self.ra = longitude(input_ra, precision=3) #Create RA object
     self.dec = latitude(input_dec, precision=2) #Create Dec. object
@@ -273,7 +274,7 @@ class coords():
 ##Same as coords class but uses "lon" and "lat" to store location longitude and latitude
 class location():
   def __init__(self, input_lon=0.0, input_lat=0.0):
-    if isinstance(input_lon, basestring): #If units sexigasimal, convert to decimal degrees
+    if isinstance(input_lon, string_types): #If units sexigasimal, convert to decimal degrees
       [input_lon, input_lat] = [sex2deg(input_lon, units='hms'), sex2deg(input_lat, units='dms')]
     self.lon = longitude(input_lon, precision=3) #Create RA object
     self.lat = latitude(input_lat, precision=2) #Create Dec. object
