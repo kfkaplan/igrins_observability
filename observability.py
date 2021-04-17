@@ -55,6 +55,58 @@ def create_region_template(rotation, plate_scale, guidestar_dra, guidestar_ddec,
     savetxt('IGRINS_svc_generated.tpl', output, fmt="%s")  #Save region template file for reading into ds9
 
 
+'''This function creates the region file for the IGRINS Slit View Camera (SVC) FOV
+Rotation in Position Angle is accounted for via rotation matrix for the 
+polygon used to represent the SVC FOV'''
+def create_region(coordobj, rotation, plate_scale, guidestar_dra, guidestar_ddec, guidestar_sl, guidestar_sw, mirror_field):
+    zoom =  plate_scale / 0.119 #Set zoom scale to scale the FOV, the McDonald Observatory 2.7m plate scale is 0.119 so changing the plate scale in the options.inp file 
+    default_slit_angle = 359.98672  #Default angle of the slit (East to west)
+    x, y, poly_x, poly_y = loadtxt('scam-outline.txt', unpack=True) #Outline of SVC FOV, thanks to Henry Roe (private communication)
+    poly_x = poly_x / 3600.0 #Convert arcseconds to degrees
+    poly_y = poly_y / 3600.0
+    if mirror_field: #If SCV field is mirrored (e.g. on DCT)...
+        poly_y = -poly_y  #Mirror the polygon describing the FOV of the SCV
+    # poly_x = [0.02714, 0.02712, 0.02593, 0.02462, 0.02412, 0.02422, 0.02429,  #Old polygon, now using new one from Henry Roe
+    #           #Default x values for points in FOV polygon
+    #           -0.00265, -0.02095, -0.02338, -0.02403, -0.02681, -0.02677, -0.02518,
+    #           -0.02256, -0.01865, -0.01333, 0.0158, 0.0236]
+    # poly_y = [-0.00825096, -0.00809768, -0.00462737, -0.00309165, 0.00030273, 0.00061059, 0.00618683,
+    #           #Default y values for points in FOV polygon
+    #           0.00582677, 0.00541191, 0.00319962, 0.00332299, -0.00340406, -0.00778661, -0.01318707,
+    #           -0.01728969, -0.02215466, -0.02662075, -0.0258552, -0.01869832]
+    rad_rot = radians(rotation)  #Convert degrees to radians for angle of rotation
+    rotMatrix = array(
+        [[cos(rad_rot), -sin(rad_rot)], [sin(rad_rot), cos(rad_rot)]])  #Set up rotation matrix for polygon
+    [poly_x, poly_y] = rotMatrix.dot([poly_x, poly_y]) * zoom  #Apply rotation matrix to the FOV polygon, and scale it if necessary
+    poly_x /= cos(radians(coordobj.dec.deg()))
+    poly_x += coordobj.ra.deg() #Add RA and Dec. position
+    poly_y += coordobj.dec.deg()
+    poly_xy = '('  #Make string to output for polygon points
+    n = size(poly_x)  #Find number of points in polygon
+    for i in range(n - 1):  #Loop through points 0 -> n-2
+        poly_xy = poly_xy + str(poly_x[i]) + ', ' + str(poly_y[i]) + ', '
+    poly_xy = poly_xy + str(poly_x[n - 1]) + ', ' + str(
+        poly_y[n - 1]) + ')'  #Give final point the special format it needs
+    total_slit_angle = longitude(default_slit_angle - rotation)  #Calculate angle to rotate slit box
+    slit_angle = str(total_slit_angle.deg())  #Convert slit angle after applying rotation of IGRINS to a string
+    output = []  #Set up array to output lines of text to region tmeplate file, as strings appended to the array
+    output.append('# Region file format: DS9 version 4.1')  #Output top line to region file
+    output.append(
+        'global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1')  #Set up color, fonts, and stuff
+    output.append('wcs0;fk5')  #Set coordinate system
+    compass_size = str(72.0 * zoom) #Scale compass size
+    output.append(
+        '# compass('+str(coordobj.ra.deg())+','+str(coordobj.dec.deg())+','+compass_size+'") compass=fk5 {N} {E} 1 1 font="helvetica 12 bold roman" color=blue fixed=0')  #Set compass (North and East arrows)
+    slit_length = str(15.0 * zoom) #Scale slit length
+    slit_width = str(1.0 * zoom) #Scale slit width
+    output.append('box('+str(coordobj.ra.deg())+','+str(coordobj.dec.deg())+','+slit_length+'",'+slit_width+'",' + slit_angle + ') # color=green width=2')  #Display slit
+    if abs(guidestar_dra) > 0. or abs(guidestar_ddec) > 0.:  #show guidestar if it exists
+        output.append('point(' + str(guidestar_dra+coordobj.ra.deg()) + ',' + str(
+            guidestar_ddec+coordobj.dec.deg()) + ') # point=circle font="helvetica 12 bold roman" color=yellow text={Offslit guide star [sl: ' + "%5.2f" % gstar_sl + ', sw:' + "%5.2f" % gstar_sw + ']}')
+    output.append('polygon' + poly_xy)  #Save SVC FOV polygon
+    savetxt('IGRINS_svc_generated.reg', output, fmt="%s")  #Save region template file for reading into ds9
+
+
 #Import Python Libraries
 from pdb import set_trace as stop  #Use stop() for debugging
 #from scipy import *  #Import scipy
@@ -258,13 +310,17 @@ if show_finder_chart == 'y':
         gstar_sw = gstar_dra_arcsec * sin(radians(PA - 90.0)) + gstar_ddec_arcsec * cos(
             radians(PA - 90.0))  #guide star position relative to slit in arcseconds
 
-    create_region_template(delta_PA, plate_scale, gstar_dra_deg, gstar_ddec_deg, gstar_sl,
+    # create_region_template(delta_PA, plate_scale, gstar_dra_deg, gstar_ddec_deg, gstar_sl,
+    #                        gstar_sw, mirror_field)  #Make region template file rotated and the specified PA
+    create_region(obj_coords, delta_PA, plate_scale, gstar_dra_deg, gstar_ddec_deg, gstar_sl,
                            gstar_sw, mirror_field)  #Make region template file rotated and the specified PA
     #ds9.set(
     #    'regions template IGRINS_svc_generated.tpl at ' + obj_coords.showcoords() + ' fk5')  #Read in regions template file
-    ds9.set('pan to '+obj_coords.showcoords() + ' wcs fk5')
-    #ds9.set('regions template ' + current_working_directory + 'IGRINS_svc_generated.tpl at ' + obj_coords.showcoords() + ' fk5')
-    ds9.set('regions template ' + current_working_directory + 'IGRINS_svc_generated.tpl')
+    #ds9.set('pan to '+obj_coords.showcoords() + ' wcs fk5')
+    print('obj_coords.showcoords() = ', obj_coords.showcoords())
+    #ds9.set('regions template ' + current_working_directory + 'IGRINS_svc_generated.tpl at,  ' + obj_coords.showcoords() + ' wcs fk5')
+    #ds9.set('regions template ' + current_working_directory + 'IGRINS_svc_generated.tpl')
+    ds9.set('regions ' + current_working_directory + 'IGRINS_svc_generated.reg')
     ds9.set('regions select all')
     ds9.set('regions group FOV new')
     ds9.set('regions select none')  #Deslect regions when finished
@@ -280,11 +336,16 @@ if show_finder_chart == 'y':
         gstar_dec_limit = gstar_dec_limit / (2.0 * 60.0)  #Convert limit in Dec. to degrees
         gstar_ra_limit = gstar_ra_limit / (2.0 * 60.0 * obj_coords.dec.cos())  #Convert limit in RA to degrees
         ds9.set('catalog 2mass')  #Initialize catalog
-        ds9.set('catalog filter "$RAJ2000>=' + str(obj_coords.ra.deg() - gstar_ra_limit) + '&&$RAJ2000<=' + str(
+        # ds9.set("catalog filter '$RAJ2000>=" + str(obj_coords.ra.deg() - gstar_ra_limit) + "&&$RAJ2000<=" + str(
+        #     obj_coords.ra.deg() + gstar_ra_limit) \
+        #         + "&&$DEJ2000>=" + str(obj_coords.dec.deg() - gstar_dec_limit) + "&&$DEJ2000<=" + str(
+        #     obj_coords.dec.deg() + gstar_dec_limit) \
+        #         + "&&$Kmag<=" + str(gstar_mag_limit) + "'")  #Load catalog
+        ds9.set(r"catalog filter '$RAJ2000>=" + str(obj_coords.ra.deg() - gstar_ra_limit) + r" $RAJ2000<=" + str(
             obj_coords.ra.deg() + gstar_ra_limit) \
-                + '&&$DEJ2000>=' + str(obj_coords.dec.deg() - gstar_dec_limit) + '&&$DEJ2000<=' + str(
+                + r" $DEJ2000>=" + str(obj_coords.dec.deg() - gstar_dec_limit) + r" $DEJ2000<=" + str(
             obj_coords.dec.deg() + gstar_dec_limit) \
-                + '&&$Kmag<=' + str(gstar_mag_limit) + '"')  #Load catalog
+                + r" $Kmag<=" + str(gstar_mag_limit) + r"'")  #Load catalog
         ds9.set(
             "catalog sort 'Kmag' incr")  #Sort list by starting from brightest K-band mag. and getting dimmer as you go down
         ds9.set("catalog export tsv " + current_working_directory + "tmp.dat")  #Save catalog list as a tab seperated value file for later trimming
