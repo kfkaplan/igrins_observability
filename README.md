@@ -1,6 +1,6 @@
 # IGRINS Observability Version 1.8
 
-### ATTENTION: IGRINS Observability is now considered obselete.  We reccomend using it's GUI successor the IGRINS Observing Planner https://github.com/kfkaplan/IGRINS_observing_planner for creating finder charts and slit-scan maps for IGRINS.
+## ATTENTION: IGRINS Observability is now depreciated.  For creating IGRINS finder charts and slit-scan maps please use the IGRINS Observing Planner: https://github.com/kfkaplan/IGRINS_observing_planner 
 
 Written by Kyle Kaplan (@kfkaplan)
 Email: kyle.kaplan@austin.utexas.edu
