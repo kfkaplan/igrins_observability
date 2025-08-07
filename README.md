@@ -1,6 +1,9 @@
 # IGRINS Observability Version 1.8
+
+### ATTENTION: IGRINS Observability is now considered obselete.  We reccomend using it's GUI successor the IGRINS Observing Planner https://github.com/kfkaplan/IGRINS_observing_planner for creating finder charts and slit-scan maps for IGRINS.
+
 Written by Kyle Kaplan (@kfkaplan)
-Email: kkaplan@usra.edu
+Email: kyle.kaplan@austin.utexas.edu
 
 This python program's main purpose is to create finder charts matching what
 an observer sees in the FOV of the IGRINS Slit View Camera at the Discovery 
